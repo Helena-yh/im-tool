@@ -240,7 +240,9 @@
 
 	var createIMConversation = function(config) {
 		$("#rcs-app")[0].innerHTML = render(templates.imMain);
-		openConversation({"lastSendTime":0,"messageContent":[],"id":"11","mcount":"0","conversationType":"1"})
+		openConversation({"lastSendTime":0,"messageContent":[],"id":"11","mcount":"0","conversationType":"1"});
+		$(".rcs-chat-custom-info")[0].innerHTML = render(templates.customInfo);
+		
 	}
 
 	//进入指定会话
@@ -300,8 +302,6 @@
 			msg.content.content = textMessageFormat(msg.content.content);
 		} else if(msg.messageType == 'FileMessage') {
 			msg.content.size = utils.getFileSize(msg.content.size);
-		} else if(msg.messageType == 'VoiceMessage') {
-			RongIMLib.RongIMVoice.preLoaded(msg.content.content);
 		}
 		return msg;
 	}
@@ -338,34 +338,6 @@
 		}
 		return _list;
 	}
-
-	//播放音频
-	var play = function(event, msgContent) {
-		RongIMLib.RongIMVoice.stop();
-		var thisTarget = event.target || event.srcElement;
-		if(thisTarget.className.indexOf('rongcloud-animate') != -1) {
-			thisTarget.className = thisTarget.className.replace(' rongcloud-animate', '');
-			clearTimeout(voicePlay);
-		} else {
-			var audioStatusNode = thisTarget.parentNode.querySelector('.rongcloud-audioState');
-			if(audioStatusNode) {
-				audioStatusNode.parentNode.removeChild(audioStatusNode);
-			}
-			if(voicePlay) {
-				clearTimeout(voicePlay);
-				var voiceList = $('.rongcloud-audioBox');
-				for(var i = 0; i < voiceList.length; i++) {
-					voiceList[i].className = 'rongcloud-audioBox rongcloud-clearfix';
-				}
-			}
-			RongIMLib.RongIMVoice.play(msgContent.content, msgContent.duration);
-			thisTarget.className = thisTarget.className + ' rongcloud-animate';
-			voicePlay = setTimeout(function() {
-				thisTarget.className = thisTarget.className.replace(' rongcloud-animate', '');
-			}, msgContent.duration * 1000);
-		}
-	}
-
 
 	//img上传图片
 	var imgUpload = function(event) {
@@ -469,11 +441,6 @@
 		$('.rcs-chat-wrapper')[0].innerHTML = '';
 	}
 
-	//最小化
-	// var minimize = function() {
-	// 	// utils.hide($('.customer-service')[0]);
-	// }
-
 	//预览图片
 	var viewImage = function(event) {
 		var thisTarget = event.target || event.srcElement;
@@ -492,22 +459,8 @@
 	var sdkInit = function(params, callbacks) {
 		var appKey = params.appKey;
 		var token = params.token;
-		var navi = params.navi || "";
 
-		if(navi !== "") {
-			//私有云
-			var config = {
-				navi: 'http://218.93.12.178'
-			};
-			console.log("私有云");
-			console.log(params);
-			RongIMLib.RongIMClient.init(appKey, null, config);
-		} else {
-			//公有云
-			console.log("公有云");
-			console.log(params);
-			RongIMLib.RongIMClient.init(appKey);
-		}
+		RongIMLib.RongIMClient.init(appKey);
 
 		var instance = RongIMClient.getInstance();
 
@@ -685,12 +638,9 @@
 	RCS.imgUpload = imgUpload;
 	RCS.fileUpload = fileUpload;
 	RCS.endConversation = endConversation;
-	RCS.play = play;
-	// RCS.minimize = minimize;
 	RCS.confirm = confirm;
 	RCS.close = close;
 	RCS.viewImage = viewImage;
 	RCS.escImageView = escImageView;
 	RCS.keyboard = keyboard;
-	// RCS.startConversation = startConversation;
 })(RCS);

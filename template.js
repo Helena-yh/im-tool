@@ -3,11 +3,11 @@
 		var list = {
 	        button: 'templates/button.html',
 	        chat: 'templates/chat.html',
-	        // conversation: 'templates/conversation.html',
 	        imageView: 'templates/imageView.html',
 	        imMain: 'templates/imMain.html',
 	        imMessage: 'templates/imMessage.html',
-	        imMessageTemplate: 'templates/imMessageTemplate.html'
+	        imMessageTemplate: 'templates/imMessageTemplate.html',
+	        customInfo: 'templates/customInfo.html',
 	    };
 	    var templates = {};
 	    for (var key in list) {
