@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>IM</title>
+    <link rel="stylesheet" href="im.css">
+</head>
+
+<body>
+    <div id="rcs-app"></div>
+</body>
+
+<script src="libs/RongIMLib.js"></script>
+<script src="libs/RongEmoji-2.2.8.js"></script>
+
+<script src="./libs/utils.js"></script>
+<script src="./libs/qiniu-upload.js"></script>
+
+<script src="./template.js"></script>
+<script src="./emoji.js"></script>
+<script src="./im.js"></script>
+
+<!-- 实例化 -->
+<script>
+       (function () {
+            var appKey = "8w7jv4qb82uyy";
+            var token = "iA0AVDISdBp49JhKC8/1OVIwovcPpjfClQ4HknMvzBodVj2TvPAOpYby2jEWeTDb37UAdnWzdptkGUbo81Rr2g==";
+            RCS.init({
+                appKey: appKey,
+                token: token,
+                target: document.getElementById('rcs-app'),
+                showConversitionList: true,
+                templates: 'templates/main.html'
+            });
+       })()
+</script>
+
+</html>
