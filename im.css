@@ -27,8 +27,8 @@ html,body{
 }
 
 .rongcloud-container img {
-    border: none;
     vertical-align: middle;
+    border: none;
 }
 
 .rongcloud-container textarea {
@@ -200,17 +200,18 @@ html,body{
     box-shadow: rgba(0, 0, 0, 0.0980392) 0px 0px 5px 2px; */
 }
 .rongcloud-kefuChat .rongcloud-rong-header{
-    height: 60px;
+    height: 80px;
     /* border-radius: 4px 4px 0px 0px; */
     position: relative;
-    background: #ccc;
+    background: #e2e2e2;
 }
 .rongcloud-kefuChat .rongcloud-rong-header .rongcloud-infoBar{
-    height: 60px;
-    line-height: 60px;
+    height: 80px;
+    line-height: 80px;
 }
 .rongcloud-kefuChat .rongcloud-rong-header .rongcloud-infoBarTit{
     position: relative;
+    padding-left: 16px;
 }
 .rongcloud-kefuChat .rongcloud-rong-header .rongcloud-Presence{
     border-radius: 50%;
@@ -224,8 +225,14 @@ html,body{
     background-color: #20e600;
 }
 .rongcloud-kefuChat .rongcloud-rong-header .rongcloud-kefuName{
-    color: #999;
-    padding-left: 16px;
+    color: #444;
+    padding-left: 10px;
+    font-size: 18px;
+}
+.rongcloud-infoBarTit img{
+    width: 45px;
+    border: none;
+    padding: 0;
 }
 .rongcloud-kefuChat .rongcloud-rong-header .rongcloud-toolBar{
     margin-right: 10px;
@@ -254,7 +261,7 @@ html,body{
     overflow: auto;
     padding: 8px 16px;
     position: absolute;
-    top:60px;
+    top:80px;
     bottom: 184px;
     background-color: white;
     -webkit-overflow-scrolling:touch;
@@ -267,7 +274,7 @@ html,body{
     line-height: 40px;
 
     position: absolute;
-    top: 60px;
+    top: 80px;
     z-index: 10;
     right: 0px;
     left: 0px;
@@ -342,7 +349,11 @@ html,body{
 }
 
 .rongcloud-Message-header {
-    margin-top: 15px;;
+    margin-top: 0;
+}
+.rongcloud-Message-header img{
+    border: 1px solid #09f;
+    padding: 5px;
 }
 .rongcloud-Message-send .rongcloud-Message-header{
     display: table;
@@ -402,10 +413,17 @@ html,body{
 
 .rongcloud-Message-body {
     position: relative;
-    /*margin-right: 70px;*/
+    margin-right: 10px;
     font-size: 14px;
-    line-height: 18px;
+    line-height: 30px;
     color: #444;
+    padding: 7px 20px;
+    background: #e2e2e2;
+    margin-left: 10px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-top: 4px;
+
 }
 .rongcloud-Message-send .rongcloud-Message-body{
     float: right;
@@ -624,7 +642,7 @@ html,body{
     border-top: 1px solid #cdd7db;
 }
 .rongcloud-text-layout {
-    margin: 10px 26px;
+    margin: 10px 20px;
 }
 .rongcloud-funcPanel {
     line-height: 22px;
@@ -1019,6 +1037,7 @@ html,body{
 }
 .rongcloud-file-size {
     font-size: 12px;
+    line-height: 12px;
 }
 .rongcloud-file-download {
     position: absolute;
@@ -1406,8 +1425,8 @@ html,body{
 }
 .rongcloud-img{
     display: block;
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
@@ -1448,9 +1467,9 @@ html,body{
     box-shadow: 0 0 4px 0px #00000036;
 }
 .rcs-chat-custom-info .rongcloud-ci-header {
-    height: 60px;
+    height: 80px;
     text-align: center;
-    line-height: 60px;
+    line-height: 80px;
     font-weight: 400;
     color: #333;
     background: #f5f5f5b3;
@@ -1460,7 +1479,7 @@ html,body{
 .rcs-chat-custom-info .rongcloud-ci-footer {
     position: absolute;
     bottom: 0;
-    height: 60px;
+    height: 80px;
     width: 100%;
     text-align: center;
 }
