@@ -536,6 +536,7 @@
 		config.target.innerHTML = render(templates.button);
 		createIMConversation(config);
 		addListener(config);
+		adminUserRender();
 	}
 
 	var addListener = function(config) {
@@ -597,6 +598,7 @@
 				getTemplates(callback);
 				emoji.init();
 				createButton(config);
+				
 			}
 		}
 		sdkInit(config, callbacks);
@@ -675,6 +677,16 @@
 		textNodes[2].innerText = msg.appkey;
 		textNodes[3].innerText = msg.SDKVersion;
 		textNodes[4].innerText = msg.issues;
+	}
+
+	var adminUserRender = function() {
+		var queryString = location.search;
+		var userId = queryString.substring(1, queryString.length);
+		var isAdmin =  userId.indexOf('admin') == 0;
+		if(isAdmin) {
+			$('.rcs-chat-wrapper')[0].style.width = "75%";
+			$('.rcs-chat-custom-info')[0].style.display = "block";
+		}
 	}
 
 	//对外暴露
