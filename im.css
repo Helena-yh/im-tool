@@ -1502,9 +1502,6 @@ html,body{
     padding: 0 10px;
     width: 95%;
 }
-.rcs-chat-custom-info .rongcloud-ci-main .ci-mian-inputbox {
-    display: none;
-}
 
 .rcs-chat-custom-info .rongcloud-ci-main .ci-main-textarea {
     background-color: #fff;
@@ -1519,6 +1516,10 @@ html,body{
     outline: none;
     padding: 0 10px;
     width: 95%;
+}
+
+.rcs-chat-custom-info .rongcloud-ci-main .ci-mian-inputbox {
+    display: none;
 }
 
 .rongcloud-ci-footer .ci-footer-submit {

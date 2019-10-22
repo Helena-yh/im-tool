@@ -610,24 +610,71 @@
 		}, 500)
 	}
 
-	//客户信息 编辑
-	var customEdit = function() {
-		var nodes = $('.ci-mian-text');
-		for(var i=0; i< nodes.length; i++) {
-			nodes[i].style.display = 'none';
+	var hideCustomEdit = function() {
+		var textNodes = $('.ci-mian-text');
+		for(var i=0; i< textNodes.length; i++) {
+			textNodes[i].style.display = 'none';
+		}
+		var inputNodes = $('.ci-mian-inputbox');
+		for(var i=0; i< inputNodes.length; i++) {
+			inputNodes[i].style.display = 'block';
 		}
 		$('.ci-footer-edit')[0].style.display = 'none';
 		$('.ci-footer-submit')[0].style.display = 'block';
+		$('.ci-footer-submit')[0].style.margin = '0 auto';
+	}
+	var hideCustomSubmit = function() {
+		var textNodes = $('.ci-mian-text');
+		for(var i=0; i< textNodes.length; i++) {
+			textNodes[i].style.display = 'block';
+		}
+		var inputNodes = $('.ci-mian-inputbox');
+		for(var i=0; i< inputNodes.length; i++) {
+			inputNodes[i].style.display = 'none';
+		}
+		$('.ci-footer-edit')[0].style.display = 'block';
+		$('.ci-footer-edit')[0].style.margin = '0 auto';
+		$('.ci-footer-submit')[0].style.display = 'none';
+	}
+	//客户信息 编辑
+	var customEdit = function() {
+		hideCustomEdit();
+		//获取数据
+		var msg = {
+			company: $('#company')[0].value,
+			orderId: $('#orderId')[0].value,
+			appkey:  $('#appkey')[0].value,
+			SDKVersion: $('#SDKVersion')[0].value,
+			issues: $('#issues')[0].value,
+		}
+		var inputNodes = $('.ci-mian-inputbox');
+		var textNodes = $('.ci-mian-text');
+		for(var i=0; i<textNodes.length; i++) {
+			inputNodes[i].value = textNodes[i].innerText
+		}
+
 	}
 
 	//客户信息 提交
 	var customSubmit = function() {
-		var nodes = $('.ci-mian-inputbox');
-		for(var i=0; i< nodes.length; i++) {
-			nodes[i].style.display = 'none';
+		hideCustomSubmit();
+		//获取数据
+		var msg = {
+			company: $('#company')[0].value,
+			orderId: $('#orderId')[0].value,
+			appkey:  $('#appkey')[0].value,
+			SDKVersion: $('#SDKVersion')[0].value,
+			issues: $('#issues')[0].value,
 		}
-		$('.ci-footer-edit')[0].style.display = 'block';
-		$('.ci-footer-submit')[0].style.display = 'none';
+		//发送消息
+
+		//渲染
+		var textNodes = $('.ci-mian-text');
+		textNodes[0].innerText = msg.company;
+		textNodes[1].innerText = msg.orderId;
+		textNodes[2].innerText = msg.appkey;
+		textNodes[3].innerText = msg.SDKVersion;
+		textNodes[4].innerText = msg.issues;
 	}
 
 	//对外暴露
