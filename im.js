@@ -610,6 +610,26 @@
 		}, 500)
 	}
 
+	//客户信息 编辑
+	var customEdit = function() {
+		var nodes = $('.ci-mian-text');
+		for(var i=0; i< nodes.length; i++) {
+			nodes[i].style.display = 'none';
+		}
+		$('.ci-footer-edit')[0].style.display = 'none';
+		$('.ci-footer-submit')[0].style.display = 'block';
+	}
+
+	//客户信息 提交
+	var customSubmit = function() {
+		var nodes = $('.ci-mian-inputbox');
+		for(var i=0; i< nodes.length; i++) {
+			nodes[i].style.display = 'none';
+		}
+		$('.ci-footer-edit')[0].style.display = 'block';
+		$('.ci-footer-submit')[0].style.display = 'none';
+	}
+
 	//对外暴露
 	RCS.init = init;
 	RCS.send = send;
@@ -626,4 +646,6 @@
 	RCS.viewImage = viewImage;
 	RCS.escImageView = escImageView;
 	RCS.keyboard = keyboard;
+	RCS.customEdit = customEdit;
+	RCS.customSubmit = customSubmit;
 })(RCS);
