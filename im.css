@@ -1464,7 +1464,7 @@ html,body{
     text-align: center;
 }
 
-.rcs-chat-custom-info .rongcloud-ci-footer .ci-footer-edit, .rcs-chat-custom-info .rongcloud-ci-footer .ci-footer-edit{
+.rcs-chat-custom-info .rongcloud-ci-footer .ci-footer-edit, .rcs-chat-custom-info .rongcloud-ci-footer .ci-footer-submit{
     cursor: pointer;
     border: none;
     width: 100px;
@@ -1485,6 +1485,7 @@ html,body{
     margin-bottom: 15px;
 }
 
+
 .rcs-chat-custom-info .rongcloud-ci-main .ci-main-input {
     background-color: #fff;
     background-image: none;
@@ -1500,6 +1501,9 @@ html,body{
     padding: 0 10px;
     width: 95%;
 }
+.rcs-chat-custom-info .rongcloud-ci-main .ci-mian-inputbox {
+    display: none;
+}
 
 .rcs-chat-custom-info .rongcloud-ci-main .ci-main-textarea {
     background-color: #fff;
@@ -1514,4 +1518,8 @@ html,body{
     outline: none;
     padding: 0 10px;
     width: 95%;
+}
+
+.rongcloud-ci-footer .ci-footer-submit {
+    display: none;
 }
