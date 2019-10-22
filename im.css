@@ -203,7 +203,7 @@ html,body{
     height: 80px;
     /* border-radius: 4px 4px 0px 0px; */
     position: relative;
-    background: #e2e2e2;
+    background: rgba(245,245,245,.7)
 }
 .rongcloud-kefuChat .rongcloud-rong-header .rongcloud-infoBar{
     height: 80px;
@@ -263,7 +263,8 @@ html,body{
     position: absolute;
     top:80px;
     bottom: 184px;
-    background-color: white;
+    /* background-color: white; */
+    background-color: rgba(255, 255, 255, 0.9);
     -webkit-overflow-scrolling:touch;
 }
 
@@ -308,6 +309,8 @@ html,body{
     display: inline-block;
     padding: 0 20px;
     cursor:default;
+    border-radius: 4px;
+    line-height: 20px;
 }
 .rongcloud-Messages-history {
     text-align: center;
@@ -417,7 +420,7 @@ html,body{
     font-size: 14px;
     line-height: 30px;
     color: #444;
-    padding: 7px 20px;
+    /* padding: 8px 10px; */
     background: #e2e2e2;
     margin-left: 10px;
     border-radius: 6px;
@@ -425,20 +428,40 @@ html,body{
     margin-top: 4px;
 
 }
+.rongcloud-Message-body:after {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 13px;
+    width: 0;
+    height: 0;
+    border-style: solid dashed dashed;
+    border-color: #e2e2e2 transparent transparent;
+    overflow: hidden;
+    border-width: 10px;
+}
+.rongcloud-Message-send .rongcloud-Message-body:after {
+    right: -10px;
+    left: auto;
+    border-color: #5FB878 transparent transparent;
+}
 .rongcloud-Message-send .rongcloud-Message-body{
     float: right;
+    color: #fff;
+    background: #5FB878;
 }
 
 .rongcloud-Message-text, .rongcloud-file-text {
     position: relative;
     display: inline-block;
     max-width: 100%;
+    padding: 8px 10px;
 }
 
 .rongcloud-Message-text pre {
     font-size: 14px;
     line-height: 18px;
-    color: rgb(68, 68, 68);;
+    /* color: rgb(68, 68, 68); */
     word-break: break-all;
     word-wrap: break-word;
 
@@ -627,7 +650,8 @@ html,body{
     font-size: 12px;
 }
 .rongcloud-rong-footer {
-    background: #fff;
+    /* background: #fff; */
+    background: hsla(0, 0%, 100%, 0.9);
     height: 184px;
     position: absolute;
     bottom: 0px;
@@ -678,6 +702,7 @@ html,body{
     overflow: auto;
     white-space: pre-wrap;
     word-wrap: break-word;
+    background: rgba(255, 255, 255, 0);
 }
 .rongcloud-text:focus {
     outline: 0;
@@ -1304,6 +1329,9 @@ html,body{
     width: 100%;
     height: 100%;
     z-index: 1;
+    background: url(./images/bg.jpg);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 }
 .rcs-chat-im-wrapper{
     left: 247px;
@@ -1399,7 +1427,7 @@ html,body{
         top: 0;
     	left: 0;
     	width: 100%;
-    	height: 100%;
+        height: 100%;
     }
     .rongcloud-kefuChat{
     	width: 100%;
@@ -1467,6 +1495,8 @@ html,body{
     background: #f5f5f5b3;
     box-shadow: 0 0 4px 0px #00000036;
     display: none;
+    border-left: 1px solid #ccc;
+    height: 100%;
 }
 .rcs-chat-custom-info .rongcloud-ci-header {
     height: 80px;
@@ -1476,6 +1506,7 @@ html,body{
     color: #333;
     background: #f5f5f5b3;
     border-bottom: 1px solid #cccccc2e;
+    
 }
 
 .rcs-chat-custom-info .rongcloud-ci-footer {
@@ -1489,10 +1520,10 @@ html,body{
 .rcs-chat-custom-info .rongcloud-ci-footer .ci-footer-edit, .rcs-chat-custom-info .rongcloud-ci-footer .ci-footer-submit{
     cursor: pointer;
     border: none;
-    width: 100px;
+    width: 80px;
     height: 36px;
     line-height: 36px;
-    border-radius: 2px;
+    border-radius: 4px;
     font-size: 9pt;
     color: rgb(255, 255, 255);
     background: #0099ff;
@@ -1522,6 +1553,7 @@ html,body{
     outline: none;
     padding: 0 10px;
     width: 95%;
+    margin-top: 10px;
 }
 
 .rcs-chat-custom-info .rongcloud-ci-main .ci-main-textarea {
@@ -1537,6 +1569,7 @@ html,body{
     outline: none;
     padding: 0 10px;
     width: 95%;
+    margin-top: 10px;
 }
 
 .rcs-chat-custom-info .rongcloud-ci-main .ci-mian-inputbox {
@@ -1546,3 +1579,14 @@ html,body{
 .rongcloud-ci-footer .ci-footer-submit {
     display: none;
 }
+
+.ci-mian-text{
+    /* height: 36px; */
+    line-height: 36px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding-left: 5px;
+    background: #fff;
+    color: #999;
+}
+

@@ -7,7 +7,7 @@
 	conversation.lastSendTime = 0;
 	conversation.messageContent = [];
 	var userId = '';
-	var targetId = '7339'; //保存收集用户信息的相关数据
+	var targetId = ''; //保存收集用户信息的相关数据
 	var role = '';
 	var templates = {};
 	var $ = utils.$;
@@ -448,7 +448,6 @@
 	var sdkInit = function (params, callbacks) {
 		var appKey = params.appKey;
 		var token = params.token;
-		userId = params.userId;
 		RongIMLib.RongIMClient.init(appKey);
 
 		var instance = RongIMClient.getInstance();
@@ -587,6 +586,9 @@
 	var init = function (config) {
 		RCS.config = config;
 		config.isIM = true;
+		userId = config.userId;
+		role = config.role;
+		role == 'custom' ? targetId = 'admin-' + userId : targetId = userId.substring(6,userId.length); 
 		var callbacks = {
 			getInstance: function (instance) {
 				var callback = function () {
