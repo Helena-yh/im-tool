@@ -1280,6 +1280,9 @@ html,body{
     right: 48px;
     width: 470px;
     height: 470px; */
+    position: absolute;
+    width: 75%;
+    height: 100%;
 }
 .rcs-chat-im-wrapper{
     left: 247px;
@@ -1432,4 +1435,83 @@ html,body{
     border-top: 1px solid #DFDFDF;
     margin: 0 10px;
     padding-top: 5px;
+}
+
+.rcs-chat-custom-info {
+    position: absolute;
+    right: 0;
+    width: 25%;
+    background: #fff;
+    height: 100%;
+    background: #f5f5f5b3;
+    box-shadow: 0 0 4px 0px #00000036;
+}
+.rcs-chat-custom-info .rongcloud-ci-header {
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    font-weight: 400;
+    color: #333;
+    background: #f5f5f5b3;
+    border-bottom: 1px solid #cccccc2e;
+}
+
+.rcs-chat-custom-info .rongcloud-ci-footer {
+    position: absolute;
+    bottom: 0;
+    height: 60px;
+    width: 100%;
+    text-align: center;
+}
+
+.rcs-chat-custom-info .rongcloud-ci-footer .ci-footer-edit, .rcs-chat-custom-info .rongcloud-ci-footer .ci-footer-edit{
+    cursor: pointer;
+    border: none;
+    width: 100px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 2px;
+    font-size: 9pt;
+    color: rgb(255, 255, 255);
+    background: #0099ff;
+    outline: 0;
+}
+
+.rcs-chat-custom-info .rongcloud-ci-main {
+    padding: 10px 15px 10px;
+}
+
+.rcs-chat-custom-info .rongcloud-ci-main p {
+    margin-bottom: 15px;
+}
+
+.rcs-chat-custom-info .rongcloud-ci-main .ci-main-input {
+    background-color: #fff;
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    box-sizing: border-box;
+    color: #606266;
+    display: block;
+    font-size: inherit;
+    height: 36px;
+    line-height: 36px;
+    outline: none;
+    padding: 0 10px;
+    width: 95%;
+}
+
+.rcs-chat-custom-info .rongcloud-ci-main .ci-main-textarea {
+    background-color: #fff;
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    box-sizing: border-box;
+    color: #606266;
+    display: block;
+    font-size: inherit;
+    line-height: 36px;
+    outline: none;
+    padding: 0 10px;
+    width: 95%;
 }
