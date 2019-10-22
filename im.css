@@ -369,6 +369,7 @@ html,body{
 .rongcloud-Message-send .rongcloud-Message-avatar {
     position: absolute;
     right: 0;
+    /* background: #000; */
 }
 
 .rongcloud-Message-author {

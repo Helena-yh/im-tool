@@ -1,7 +1,6 @@
 ;(function(RCS){
 	var getTemplates = function(callback){
 		var list = {
-	        button: 'templates/button.html',
 	        chat: 'templates/chat.html',
 	        imageView: 'templates/imageView.html',
 	        imMain: 'templates/imMain.html',

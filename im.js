@@ -6,8 +6,9 @@
 	var conversation = {};
 	conversation.lastSendTime = 0;
 	conversation.messageContent = [];
-	var voicePlay = null;
-	var userInfoValue = {}; //保存收集用户信息的相关数据
+	var userId = '';
+	var targetId = '7339'; //保存收集用户信息的相关数据
+	var role='';
 	var templates = {};
 	var $ = utils.$;
 	var terminal;
@@ -120,7 +121,7 @@
 	//发送消息
 	var sendMessage = function(msg, callback) {
 		// var targetId = conversation.id; // 目标 Id
-		RongIMClient.getInstance().sendMessage(1, 11, msg, {
+		RongIMClient.getInstance().sendMessage(RongIMLib.ConversationType.PRIVATE, targetId, msg, {
 			// 发送消息成功
 			onSuccess: function(message) {
 				console.log(message);
@@ -131,14 +132,6 @@
 					// updateConversationList();
 					updateMessage(message);
 				}
-				RongIMClient.getInstance().sendRecallMessage(message, {
-				    onSuccess: function (message) {
-				        console.log('撤回成功', message);
-				    },
-				    onError: function (errorCode,message) {
-				        console.log('撤回失败', message);
-				    }
-				});
 			},
 			onError: function(errorCode, message) {
 				var info = '';
@@ -175,7 +168,7 @@
 		if(message.messageType == 'ReadReceiptMessage') {
 			return; //ReadReceiptMessage的messageType
 		}
-		// conversation.messageContent.push(message);
+		conversation.messageContent.push(message);
 		var newMessage = modifyMessage(utils.cloneObj(message));
 		if(message.messageDirection != 1 && supportNot) {
 			pushMessage(newMessage);
@@ -235,7 +228,7 @@
 			var newHeight = messageBox.scrollHeight;
 			messageBox.scrollTop = newHeight - oldHeight;
 		}
-		getHisMessage(conversation, null, 20, callbacks);
+		getHisMessage(null, 20, callbacks);
 	}
 
 	var createIMConversation = function(config) {
@@ -274,17 +267,13 @@
 				$('.rongcloud-Messages-history')[0].style.display = 'block';
 			}
 		}
-		var count = conversation.mcount < 2 ? 2 : (conversation.mcount > 20 ? 20 : conversation.mcount);
-		getHisMessage(conversation, 0, parseInt(count), callbacks);
+		var count = conversation.mcount < 5 ? 5 : (conversation.mcount > 20 ? 20 : conversation.mcount);
+		getHisMessage(0, parseInt(count), callbacks);
 	}
 
 	//拉去消息记录
-	var getHisMessage = function(conversation, timestrap, count, callbacks) {
-		var conversationType = parseInt(conversation.conversationType); //私聊,其他会话选择相应的消息类型即可。
-		var targetId = conversation.id; // 想获取自己和谁的历史消息，targetId 赋值为对方的 Id。
-		// timestrap默认传 null，若从头开始获取历史消息，请赋值为 0 ,timestrap = 0;
-		// count每次获取的历史消息条数，范围 0-20 条，可以多次获取。
-		RongIMLib.RongIMClient.getInstance().getHistoryMessages(conversationType, targetId, timestrap, count, {
+	var getHisMessage = function(timestrap, count, callbacks) {
+		RongIMLib.RongIMClient.getInstance().getHistoryMessages(RongIMLib.ConversationType.PRIVATE, targetId, timestrap, count, {
 			onSuccess: function(list, hasMsg) {
 				console.info(JSON.stringify(list));
 				conversation.messageContent = list.concat(conversation.messageContent);
@@ -459,7 +448,7 @@
 	var sdkInit = function(params, callbacks) {
 		var appKey = params.appKey;
 		var token = params.token;
-
+		userId = params.userId;
 		RongIMLib.RongIMClient.init(appKey);
 
 		var instance = RongIMClient.getInstance();
@@ -516,13 +505,7 @@
 					return;
 				}
 				console.log(message);
-				if(message.conversationType == RongIMLib.ConversationType.PRIVATE) {
-					if(message.targetId == conversation.id) {
-						updateMessage(message);
-						clearUnreadCount(conversation);
-					}
-					// updateConversationList();
-				}
+				updateMessage(message);
 			}
 		});
 

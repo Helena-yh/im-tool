@@ -26,10 +26,14 @@
 <!-- 实例化 -->
 <script>
     var appKey = "8w7jv4qb82uyy";
+    // 通过 url 选取用户
+    var queryString = location.search;
+    var userId = queryString.substring(1, queryString.length);
     function init(token) {
         RCS.init({
             appKey: appKey,
             token: token,
+            userId:userId,
             target: document.getElementById('rcs-app'),
             showConversitionList: true,
             templates: 'templates/main.html'
@@ -55,9 +59,7 @@
     }
 
     (function () {
-        // 通过 url 选取用户
-        var queryString = location.search;
-        var userId = queryString.substring(1, queryString.length);
+
         getToken(userId);
     })()
 </script>
