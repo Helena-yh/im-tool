@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>融云技术支持聊天工具</title>
+    <link rel="shortcut icon" sizes="180x180" href="./images/favicon.png">
+    <link rel="stylesheet" href="im.css">
+</head>
+
+<body>
+    <div id="create-url" class="rcs-create-url">
+        <div class="rcs-create-url-bg"></div>
+        <div class="rcs-create-main">
+            <div class="rcs-create-url-title">创建通讯 URL</div>
+            <input id="uid" type="text" placeholder="请输入支持号" />
+            <button onclick="createUrl()">生成 URL</button>
+            <div id="showUrl" class="rcs-showUrl">
+                <div id="custom">
+                    <span>客户 URL :</span>
+                    <input type="text" id="customInput" readonly/>
+                    <i title="点击复制链接" onclick="copyUrl('customInput')"></i>
+                </div>
+                <div id="admin">
+                    <span>支持人员 URL : </span>
+                    <input type="text" id="adminInput" readonly/>
+                    <i title="点击复制链接" onclick="copyUrl('adminInput')"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    function createUrl() {
+        let id = document.getElementById('uid').value;
+        let href = location.href;
+        let custom = href + '?' + id;
+        let admin = href + '?admin-' + id + '&9999';
+        document.querySelector("#custom input").value = custom;
+        document.querySelector("#admin input").value = admin;
+        document.getElementById('showUrl').style.display = 'block';
+        // document.getElementById("admin").append(admin);
+    }
+
+    function copyUrl(id){
+        var Url=document.getElementById(id);  
+        Url.select(); // 选择对象  
+        document.execCommand("Copy"); // 执行浏览器复制命令  
+        // alert("复制成功！"); 
+    }
+</script>
+
+</html>

@@ -5,6 +5,18 @@ html,body{
     margin: 0 auto;
     padding: 0;
 }
+#rcs-app{
+    width: 100%;
+    height: 100%;
+}
+#rcs-main{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: url(./images/bg_im.jpg);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
 .rongcloud-container *,.rongcloud-container *:before,.rongcloud-container *:after {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -428,7 +440,7 @@ html,body{
     margin-top: 4px;
 
 }
-.rongcloud-Message-body:after {
+.rongcloud-Message-after:after {
     content: '';
     position: absolute;
     left: -10px;
@@ -440,7 +452,7 @@ html,body{
     overflow: hidden;
     border-width: 10px;
 }
-.rongcloud-Message-send .rongcloud-Message-body:after {
+.rongcloud-Message-send .rongcloud-Message-after:after {
     right: -10px;
     left: auto;
     border-color: #5FB878 transparent transparent;
@@ -1329,7 +1341,7 @@ html,body{
     width: 100%;
     height: 100%;
     z-index: 1;
-    background: url(./images/bg.jpg);
+    background: url(./images/bg_im.jpg);
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
@@ -1492,7 +1504,7 @@ html,body{
     width: 25%;
     background: #fff;
     height: 100%;
-    background: #f5f5f5b3;
+    background:rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 4px 0px #00000036;
     display: none;
     border-left: 1px solid #ccc;
@@ -1504,14 +1516,14 @@ html,body{
     line-height: 80px;
     font-weight: 400;
     color: #333;
-    background: #f5f5f5b3;
+    /* background: #f5f5f5b3; */
     border-bottom: 1px solid #cccccc2e;
     
 }
 
 .rcs-chat-custom-info .rongcloud-ci-footer {
     position: absolute;
-    bottom: 0;
+    /* bottom: 0; */
     height: 80px;
     width: 100%;
     text-align: center;
@@ -1573,11 +1585,11 @@ html,body{
 }
 
 .rcs-chat-custom-info .rongcloud-ci-main .ci-mian-inputbox {
-    display: none;
+    /* display: none; */
 }
 
 .rongcloud-ci-footer .ci-footer-submit {
-    display: none;
+    /* display: none; */
 }
 
 .ci-mian-text{
@@ -1589,4 +1601,117 @@ html,body{
     background: #fff;
     color: #999;
 }
+.rcs-create-url{
+    /* display: none; */
+    width: 100%;
+    height: 100%;
+}
+.rcs-create-url-bg{
+    width: 100%;
+    height: 100%;
+    background: url(./images/bg.jpg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    opacity: .6;
+}
+.rcs-create-main{
+    background: #e8e8e8a1;
+    border-radius: 6px;
+    width: 600px;
+    height: 330px;
+    margin: 0 auto;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -200px;
+    margin-left: -300px;
+    text-align: center;
+    box-shadow: 0 2px 6px #ccc;
+    padding-top: 20px;
+}
+.rcs-create-main input{
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    color: #606266;
+    font-size: 12px;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 10px;
+    margin-top: 38px;
+}
 
+.rcs-create-main button{
+    cursor: pointer;
+    border: none;
+    width: 80px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 4px;
+    font-size: 9pt;
+    color: rgb(255, 255, 255);
+    background: #0099ff;
+    outline: 0;
+}
+.rcs-create-url-title{
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+    color: #444;
+    margin-top: 20px;
+}
+.rcs-showUrl{
+    display: none;
+    width: 92%;
+    margin: 0 auto;
+    /* margin-top: 30px; */
+    text-align: left;
+    padding-left: 20px;
+    font-size: 14px;
+}
+.rcs-showUrl span{
+    display: inline-block;
+    width: 100px;
+}
+.rcs-showUrl input{
+    width: 380px;
+    padding: 0;
+    border: none;
+    background: #fff0;
+    font-size: 14px;
+    outline:none;
+}
+ input:focus{
+    border: none;
+}
+.rcs-showUrl i{
+    background-image: url(./images/copy.png);
+    background-size: 20px 20px;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+#message, .message {
+    position: fixed;
+    top: 325px;
+    right: 8%;
+    width: 158px;
+    height: 36px;
+    line-height: 36px;
+    border-width: 0;
+    border-radius: 0.6em;
+    color: #ffffff;
+    background-color: #0099ffba;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    text-align: center;
+    opacity: 1;
+    z-index: 1500;
+    -webkit-transition: opacity 1s ease-out;
+    -moz-transition: opacity 1s ease-out;
+    -ms-transition: opacity 1s ease-out;
+    -o-transition: opacity 1s ease-out;
+    transition: opacity 1s ease-out;
+}

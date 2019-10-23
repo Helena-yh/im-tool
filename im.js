@@ -13,6 +13,7 @@
 	var $ = utils.$;
 	var terminal;
 	var supportNot = false; //页面是否支持notification
+	var saveCustomTargetId = 'RongCloud';
 
 	//加载模板
 	var getTemplates = function (callback) {
@@ -235,7 +236,6 @@
 		$("#rcs-app")[0].innerHTML = render(templates.imMain);
 		openConversation({ "lastSendTime": 0, "messageContent": [], "id": "11", "mcount": "0", "conversationType": "1" });
 		$(".rcs-chat-custom-info")[0].innerHTML = render(templates.customInfo);
-
 	}
 
 	//进入指定会话
@@ -467,27 +467,12 @@
 						}
 						callbacks.getInstance && callbacks.getInstance(instance);
 						break;
-					case RongIMLib.ConnectionStatus.CONNECTING:
-						console.log('正在链接');
-						break;
-					case RongIMLib.ConnectionStatus.DISCONNECTED:
-						console.log('断开连接');
-						break;
-					case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
-						console.log('其他设备登录');
-						break;
-					case RongIMLib.ConnectionStatus.DOMAIN_INCORRECT:
-						console.log('域名不正确');
-						break;
 					case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
 						console.log('网络不可用');
 						reconnect();
 						break;
 					case RongIMLib.ConnectionStatus.DISCONNECTED:
 						console.log('断开连接');
-						break;
-					case 4:
-						console.log('token无效');
 						break;
 					default:
 						console.log('未知错误');
@@ -513,13 +498,10 @@
 		RongIMClient.connect(token, {
 			onSuccess: function (userId) {
 				console.log("链接成功，用户id：" + userId);
-				var messageName = 'PersonMessage'; // 消息名称
-				var objectName = 'TEST'; // 消息内置名称，请按照此格式命名
-				var isCounted = true; // 消息计数
-				var isPersited = true; // 消息保存
-				var mesasgeTag = new RongIMLib.MessageTag(isCounted, isPersited);
-				var prototypes = ['name']; // 消息类中的属性名
-				RongIMClient.registerMessageType(messageName, objectName, mesasgeTag, prototypes);
+				registerMessage();
+				if (role == 'admin') {
+					getCustomInfo()
+				}
 			},
 			onTokenIncorrect: function () {
 				console.log('token无效');
@@ -530,7 +512,15 @@
 			}
 		});
 	}
-
+	var registerMessage = function () {
+		var messageName = 'CustomInfo'; // 消息名称
+		var objectName = 'CUSTOMINFO'; // 消息内置名称，请按照此格式命名
+		var isCounted = true; // 消息计数
+		var isPersited = true; // 消息保存
+		var mesasgeTag = new RongIMLib.MessageTag(isCounted, isPersited);
+		var prototypes = ['info']; // 消息类中的属性名
+		RongIMClient.registerMessageType(messageName, objectName, mesasgeTag, prototypes);
+	}
 	//创建button
 	var createButton = function (config) {
 		config.target.innerHTML = render(templates.button);
@@ -588,7 +578,7 @@
 		config.isIM = true;
 		userId = config.userId;
 		role = config.role;
-		role == 'custom' ? targetId = 'admin-' + userId : targetId = userId.substring(6,userId.length); 
+		role == 'custom' ? targetId = 'admin-' + userId : targetId = userId.substring(6, userId.length);
 		var callbacks = {
 			getInstance: function (instance) {
 				var callback = function () {
@@ -601,10 +591,39 @@
 				getTemplates(callback);
 				emoji.init();
 				createButton(config);
-				
 			}
 		}
 		sdkInit(config, callbacks);
+	}
+
+	var getCustomInfo = function () {
+		var conversationType = RongIMLib.ConversationType.PRIVATE;
+		var count = 2;
+		RongIMLib.RongIMClient.getInstance().getHistoryMessages(conversationType, saveCustomTargetId, 0, count, {
+			onSuccess: function (list, hasMsg) {
+				var msg;
+				if (list.length == 0) {
+					msg = {
+						company: '无',
+						orderId: '无',
+						appkey: '无',
+						SDKVersion: '无',
+						issues: '无'
+					}
+
+				} else {
+					msg = list[list.length - 1].content.info;
+				}
+
+				showCustomInfo(msg)
+				console.log('获取历史消息成功', list);
+
+			},
+			onError: function (error) {
+				// 请排查：单群聊消息云存储是否开通
+				console.log('获取历史消息失败', error);
+			}
+		});
 	}
 
 	//H5唤醒键盘的时候输入框显示在视野内
@@ -615,78 +634,95 @@
 		}, 500)
 	}
 
-	var hideCustomEdit = function() {
-		var textNodes = $('.ci-mian-text');
-		for(var i=0; i< textNodes.length; i++) {
-			textNodes[i].style.display = 'none';
-		}
-		var inputNodes = $('.ci-mian-inputbox');
-		for(var i=0; i< inputNodes.length; i++) {
-			inputNodes[i].style.display = 'block';
-		}
-		$('.ci-footer-edit')[0].style.display = 'none';
-		$('.ci-footer-submit')[0].style.display = 'block';
-		$('.ci-footer-submit')[0].style.margin = '0 auto';
-	}
-	var hideCustomSubmit = function() {
-		var textNodes = $('.ci-mian-text');
-		for(var i=0; i< textNodes.length; i++) {
-			textNodes[i].style.display = 'block';
-		}
-		var inputNodes = $('.ci-mian-inputbox');
-		for(var i=0; i< inputNodes.length; i++) {
-			inputNodes[i].style.display = 'none';
-		}
-		$('.ci-footer-edit')[0].style.display = 'block';
-		$('.ci-footer-edit')[0].style.margin = '0 auto';
-		$('.ci-footer-submit')[0].style.display = 'none';
-	}
+	// var hideCustomEdit = function () {
+	// 	var textNodes = $('.ci-mian-text');
+	// 	for (var i = 0; i < textNodes.length; i++) {
+	// 		textNodes[i].style.display = 'none';
+	// 	}
+	// 	var inputNodes = $('.ci-mian-inputbox');
+	// 	for (var i = 0; i < inputNodes.length; i++) {
+	// 		inputNodes[i].style.display = 'block';
+	// 	}
+	// 	$('.ci-footer-edit')[0].style.display = 'none';
+	// 	$('.ci-footer-submit')[0].style.display = 'block';
+	// 	$('.ci-footer-submit')[0].style.margin = '0 auto';
+	// }
+	// var hideCustomSubmit = function() {
+	// 	var textNodes = $('.ci-mian-text');
+	// 	for(var i=0; i< textNodes.length; i++) {
+	// 		textNodes[i].style.display = 'block';
+	// 	}
+	// 	var inputNodes = $('.ci-mian-inputbox');
+	// 	for(var i=0; i< inputNodes.length; i++) {
+	// 		inputNodes[i].style.display = 'none';
+	// 	}
+	// 	$('.ci-footer-edit')[0].style.display = 'block';
+	// 	$('.ci-footer-edit')[0].style.margin = '0 auto';
+	// 	$('.ci-footer-submit')[0].style.display = 'none';
+	// }
 	//客户信息 编辑
-	var customEdit = function() {
-		hideCustomEdit();
-		//获取数据
-		var msg = {
-			company: $('#company')[0].value,
-			orderId: $('#orderId')[0].value,
-			appkey:  $('#appkey')[0].value,
-			SDKVersion: $('#SDKVersion')[0].value,
-			issues: $('#issues')[0].value,
-		}
-		var inputNodes = $('.ci-mian-inputbox');
-		var textNodes = $('.ci-mian-text');
-		for(var i=0; i<textNodes.length; i++) {
-			inputNodes[i].value = textNodes[i].innerText
-		}
+	// var customEdit = function () {
+	// 	hideCustomEdit();
+	// 	//获取数据
+	// 	var msg = {
+	// 		company: $('#company')[0].value,
+	// 		orderId: $('#orderId')[0].value,
+	// 		appkey: $('#appkey')[0].value,
+	// 		SDKVersion: $('#SDKVersion')[0].value,
+	// 		issues: $('#issues')[0].value,
+	// 	}
+	// 	var inputNodes = $('.ci-mian-inputbox');
+	// 	var textNodes = $('.ci-mian-text');
+	// 	for (var i = 0; i < textNodes.length; i++) {
+	// 		inputNodes[i].value = textNodes[i].innerText
+	// 	}
 
-	}
+	// }
 
 	//客户信息 提交
-	var customSubmit = function() {
-		hideCustomSubmit();
+	var customSubmit = function () {
+		// hideCustomSubmit();
 		//获取数据
-		var msg = {
+		let msg = {
 			company: $('#company')[0].value,
 			orderId: $('#orderId')[0].value,
-			appkey:  $('#appkey')[0].value,
+			appkey: $('#appkey')[0].value,
 			SDKVersion: $('#SDKVersion')[0].value,
 			issues: $('#issues')[0].value,
 		}
 		//发送消息
-
+		sendCustomInfoMessage(msg);
 		//渲染
-		var textNodes = $('.ci-mian-text');
-		textNodes[0].innerText = msg.company;
-		textNodes[1].innerText = msg.orderId;
-		textNodes[2].innerText = msg.appkey;
-		textNodes[3].innerText = msg.SDKVersion;
-		textNodes[4].innerText = msg.issues;
+		showCustomInfo(msg);
 	}
 
-	var adminUserRender = function() {
+	var showCustomInfo = function (msg) {
+		//渲染
+		var textNodes = $('.ci-mian-inputbox');
+		textNodes[0].value = msg.company;
+		textNodes[1].value = msg.orderId;
+		textNodes[2].value = msg.appkey;
+		textNodes[3].value = msg.SDKVersion;
+		textNodes[4].value = msg.issues;
+		// customEdit();
+	}
+	var sendCustomInfoMessage = function (msgInfo) {
+		var conversationType = RongIMLib.ConversationType.PRIVATE;  //单聊, 其他会话选择相应的消息类型即可
+		var msg = new RongIMClient.RegisterMessage.CustomInfo({ info: msgInfo });
+		RongIMClient.getInstance().sendMessage(conversationType, saveCustomTargetId, msg, {
+			onSuccess: function (message) {
+				msgBox("提交成功",1000);
+			},
+			onError: function (errorCode) {
+				msgBox("提交失败",1000);
+			}
+		});
+	}
+	var adminUserRender = function () {
 		var queryString = location.search;
 		var userId = queryString.substring(1, queryString.length);
-		var isAdmin =  userId.indexOf('admin') == 0;
-		if(isAdmin) {
+		// var isAdmin =  userId.indexOf('admin') == 0;
+		if (role == 'admin') {
 			$('.rcs-chat-wrapper')[0].style.width = "75%";
 			$('.rcs-chat-custom-info')[0].style.display = "block";
 		}
@@ -702,7 +738,7 @@
 				console.log('token 无效');
 			},
 			onError: function (errorCode) {
-				console.log(errorcode);
+				console.log(errorCode);
 			}
 		};
 		var config = {
@@ -710,8 +746,9 @@
 			url: 'cdn.ronghub.com/RongIMLib-2.5.1.min.js?d=' + Date.now(),
 			rate: [100, 1000, 3000, 6000, 10000]
 		};
-		RongIMClient.reconnect(callback, config);
+		RongIMClient.reconnect(callback);
 	}
+
 	//对外暴露
 	RCS.init = init;
 	RCS.send = send;
@@ -728,6 +765,43 @@
 	RCS.viewImage = viewImage;
 	RCS.escImageView = escImageView;
 	RCS.keyboard = keyboard;
-	RCS.customEdit = customEdit;
+	// RCS.customEdit = customEdit;
 	RCS.customSubmit = customSubmit;
 })(RCS);
+
+/**
+* 显示提示信息
+* @param text
+*/
+var t;
+var tt;
+function msgBox(text,time) {
+	if (g('checkError') != null) {
+		hide('checkError');
+	}
+	if (text == '') {
+		return;
+	}
+	var msgDiv = g('message');
+	msgDiv.innerHTML = text;
+	msgDiv.style.opacity = 1;
+	msgDiv.style.filter = "alpha(opacity=100)";
+	show('message');
+	clearTimeout(t);
+	clearTimeout(tt);
+	tt = setTimeout(function () { test('message') }, time);
+}
+function test(id) {
+	g(id).style.opacity = 0;
+	g(id).style.filter = "alpha(opacity=0)";
+	t = setTimeout(function () { hide('message') }, 300);
+}
+function g(id) {
+	return document.getElementById(id);
+}
+function hide(id) {
+	g(id).style.display = 'none';
+}
+function show(id) {
+	g(id).style.display = 'block';
+}
