@@ -1,5 +1,5 @@
 ;
-(function(RCS) {
+(function (RCS) {
 	var utils = RCS.utils;
 	var emoji = RCS.emoji;
 	var render = utils.render;
@@ -7,22 +7,22 @@
 	conversation.lastSendTime = 0;
 	conversation.messageContent = [];
 	var userId = '';
-	var targetId = '7339'; //保存收集用户信息的相关数据
-	var role='';
+	var targetId = ''; //保存收集用户信息的相关数据
+	var role = '';
 	var templates = {};
 	var $ = utils.$;
 	var terminal;
 	var supportNot = false; //页面是否支持notification
 
 	//加载模板
-	var getTemplates = function(callback) {
+	var getTemplates = function (callback) {
 		templates = RCS.getTemplates();
 		callback && callback();
 	}
 
 	//键盘回车发送
-	var keySend = function(event) {
-		if(event.keyCode == '13' && !event.shiftKey) {
+	var keySend = function (event) {
+		if (event.keyCode == '13' && !event.shiftKey) {
 			event.preventDefault()
 			send();
 		} else {
@@ -30,10 +30,10 @@
 		}
 	}
 	//发送
-	var send = function() {
+	var send = function () {
 		var inputMsg = $(".rongcloud-text")[0];
 		var message = inputMsg.value;
-		if(message) {
+		if (message) {
 			message = emoji.symbolToEmoji(message);
 			sendMessage(new RongIMLib.TextMessage({
 				content: message,
@@ -44,45 +44,45 @@
 		}
 	}
 	//每6秒执行一次正在输入消息发送
-	var inputChange = function() {
+	var inputChange = function () {
 		var timespan = new Date().getTime() - conversation.lastSendTime;
-		if(timespan > 1000 * 6) {
+		if (timespan > 1000 * 6) {
 			conversation.lastSendTime += timespan;
 			sendTyping();
 		}
 	}
 	//正在输入中
-	var sendTyping = function() {
-		if(conversation.targetType == RongIMLib.ConversationType.CUSTOMER_SERVICE) {
+	var sendTyping = function () {
+		if (conversation.targetType == RongIMLib.ConversationType.CUSTOMER_SERVICE) {
 			var msg = new RongIMLib.TypingStatusMessage({
 				typingContentType: 'RC:TxtMsg',
 				data: null
 			});
-			var callback = function() {};
+			var callback = function () { };
 			sendMessage(msg, callback);
 		}
 	}
 	//显示表情
-	var showemoji = function(event) {
+	var showemoji = function (event) {
 		event.stopPropagation();
 		var emojiContent = $('.rongcloud-expressionWrap')[0];
-		if(emojiContent.style.display == 'none') {
+		if (emojiContent.style.display == 'none') {
 			utils.show(emojiContent);
 		} else {
 			utils.hide(emojiContent);
 		}
 	}
 	//表情点击
-	var chooseEmoji = function(event) {
+	var chooseEmoji = function (event) {
 		event.stopPropagation();
 		var emojiContent = $('.rongcloud-expressionWrap')[0];
 		var thisTarget = event.target || event.srcElement;
 		var textArea = $('.rongcloud-text')[0];
 		var emojiName = thisTarget.getAttribute('name');
-		if(emojiName) {
+		if (emojiName) {
 			textArea.value += emojiName;
 			utils.hide(emojiContent);
-			if(terminal == 'pc') {
+			if (terminal == 'pc') {
 				textArea.focus();
 				range = document.createRange();
 				range.selectNodeContents(textArea);
@@ -97,21 +97,21 @@
 	}
 
 	function textMessageFormat(content) {
-		if(content.length === 0) {
+		if (content.length === 0) {
 			return '';
 		}
 
 		content = utils.encodeHtmlStr(content);
 
-		content = utils.replaceUri(content, function(uri, protocol) {
+		content = utils.replaceUri(content, function (uri, protocol) {
 			var link = uri;
-			if(!protocol) {
+			if (!protocol) {
 				link = 'http://' + uri;
 			}
 			return '<a class="rong-link-site" target="_blank" href="' + link + '">' + uri + '</a>';
 		});
 
-		content = utils.replaceEmail(content, function(email) {
+		content = utils.replaceEmail(content, function (email) {
 			return '<a class="rong-link-email" href="mailto:' + email + '">' + email + '<a>';
 		});
 
@@ -119,23 +119,23 @@
 	}
 
 	//发送消息
-	var sendMessage = function(msg, callback) {
+	var sendMessage = function (msg, callback) {
 		// var targetId = conversation.id; // 目标 Id
 		RongIMClient.getInstance().sendMessage(RongIMLib.ConversationType.PRIVATE, targetId, msg, {
 			// 发送消息成功
-			onSuccess: function(message) {
+			onSuccess: function (message) {
 				console.log(message);
 				//message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
 				console.log("Send successfully");
 				callback && callback();
-				if(!callback) {
+				if (!callback) {
 					// updateConversationList();
 					updateMessage(message);
 				}
 			},
-			onError: function(errorCode, message) {
+			onError: function (errorCode, message) {
 				var info = '';
-				switch(errorCode) {
+				switch (errorCode) {
 					case RongIMLib.ErrorCode.TIMEOUT:
 						info = '超时';
 						break;
@@ -164,20 +164,20 @@
 	}
 
 	//显示新消息
-	var updateMessage = function(message) {
-		if(message.messageType == 'ReadReceiptMessage') {
+	var updateMessage = function (message) {
+		if (message.messageType == 'ReadReceiptMessage') {
 			return; //ReadReceiptMessage的messageType
 		}
 		conversation.messageContent.push(message);
 		var newMessage = modifyMessage(utils.cloneObj(message));
-		if(message.messageDirection != 1 && supportNot) {
+		if (message.messageDirection != 1 && supportNot) {
 			pushMessage(newMessage);
 		}
 		var messageList = $(".rcs-message-box")[0];
-		if(!messageList) {
+		if (!messageList) {
 			return;
 		}
-		if(newMessage.sentTime - conversation.lastSendTime >= 60000) { //超过1分钟
+		if (newMessage.sentTime - conversation.lastSendTime >= 60000) { //超过1分钟
 			var messageTime = {};
 			messageTime.content = {};
 			messageTime.messageType = 'TimeMessage';
@@ -190,8 +190,8 @@
 	}
 
 	//web push message
-	var pushMessage = function(msg) {
-		if(terminal == 'pc') {
+	var pushMessage = function (msg) {
+		if (terminal == 'pc') {
 			var title = '消息提醒';
 			var options = {
 				body: "您有一条新消息，请及时回复",
@@ -199,12 +199,12 @@
 			};
 			var notification = new Notification(title, options);
 
-			notification.onclick = function(event) {
+			notification.onclick = function (event) {
 				window.focus();
 				notification.close();
 			}
-			notification.onshow = function() {
-				setTimeout(function() {
+			notification.onshow = function () {
+				setTimeout(function () {
 					notification.close();
 				}, 5000);
 			};
@@ -212,13 +212,13 @@
 	}
 
 	//图片新消息图片加载完毕滚动到最下面
-	var scrollBottom = function() {
+	var scrollBottom = function () {
 		var messageList = $(".rcs-message-box")[0];
 		messageList.scrollTop = messageList.scrollHeight;
 	}
 	//加载历史消息
-	var loadHisMessages = function() {
-		var callbacks = function(list, hasMsg) {
+	var loadHisMessages = function () {
+		var callbacks = function (list, hasMsg) {
 			var messageBox = $(".rcs-message-box")[0];
 			var messageList = {};
 			messageList.hasMore = hasMsg;
@@ -231,17 +231,17 @@
 		getHisMessage(null, 20, callbacks);
 	}
 
-	var createIMConversation = function(config) {
+	var createIMConversation = function (config) {
 		$("#rcs-app")[0].innerHTML = render(templates.imMain);
-		openConversation({"lastSendTime":0,"messageContent":[],"id":"11","mcount":"0","conversationType":"1"});
+		openConversation({ "lastSendTime": 0, "messageContent": [], "id": "11", "mcount": "0", "conversationType": "1" });
 		$(".rcs-chat-custom-info")[0].innerHTML = render(templates.customInfo);
-		
+
 	}
 
 	//进入指定会话
-	var openConversation = function(conversation) {
+	var openConversation = function (conversation) {
 		conversation.targetType = conversation.conversationType;
-		var callbacks = function(list, hasMsg) {
+		var callbacks = function (list, hasMsg) {
 			var data = {};
 			var messageList = {};
 			messageList.firstEnter = true;
@@ -258,12 +258,12 @@
 			//初始化表情
 			var emojiList = emoji.getEmoji();
 			var strHtml = '';
-			for(var i = 0; i < emojiList.length; i++) {
+			for (var i = 0; i < emojiList.length; i++) {
 				strHtml += '<div class="emojiItem">' + emojiList[i].outerHTML + '</div>';
 			}
 			$('.rongcloud-expressionContent')[0].innerHTML += strHtml;
 
-			if(hasMsg) {
+			if (hasMsg) {
 				$('.rongcloud-Messages-history')[0].style.display = 'block';
 			}
 		}
@@ -272,34 +272,34 @@
 	}
 
 	//拉去消息记录
-	var getHisMessage = function(timestrap, count, callbacks) {
+	var getHisMessage = function (timestrap, count, callbacks) {
 		RongIMLib.RongIMClient.getInstance().getHistoryMessages(RongIMLib.ConversationType.PRIVATE, targetId, timestrap, count, {
-			onSuccess: function(list, hasMsg) {
+			onSuccess: function (list, hasMsg) {
 				console.info(JSON.stringify(list));
 				conversation.messageContent = list.concat(conversation.messageContent);
 				callbacks(list, hasMsg);
 			},
-			onError: function(error) {
+			onError: function (error) {
 				console.log("GetHistoryMessages,errorcode:" + error);
 			}
 		});
 	}
 
 	//单条消息修饰
-	var modifyMessage = function(msg) {
-		if(msg.messageType == 'TextMessage') {
+	var modifyMessage = function (msg) {
+		if (msg.messageType == 'TextMessage') {
 			msg.content.content = textMessageFormat(msg.content.content);
-		} else if(msg.messageType == 'FileMessage') {
+		} else if (msg.messageType == 'FileMessage') {
 			msg.content.size = utils.getFileSize(msg.content.size);
 		}
 		return msg;
 	}
 
 	//消息修饰，2条消息之间相差6000毫秒，显示消息发送时间
-	var modificateMessage = function(list) {
+	var modificateMessage = function (list) {
 		var listTemp = JSON.parse(JSON.stringify(list));
 		var _list = [];
-		for(var i = 0; i < listTemp.length; i++) {
+		for (var i = 0; i < listTemp.length; i++) {
 			var messageTime = {
 				sentTime: utils.getTime(listTemp[i].sentTime),
 				messageType: 'TimeMessage'
@@ -313,14 +313,14 @@
 				"RCCombineMessage"
 
 			];
-			if(messageMap.indexOf(listTemp[i].messageType) >= 0) {
+			if (messageMap.indexOf(listTemp[i].messageType) >= 0) {
 				listTemp[i] = modifyMessage(listTemp[i]);
 			} else {
 				listTemp[i].messageType = 'UnknownMessage';
 			}
-			if(i == 0) {
+			if (i == 0) {
 				_list.push(messageTime);
-			} else if(listTemp[i].sentTime - listTemp[i - 1].sentTime >= 60000) {
+			} else if (listTemp[i].sentTime - listTemp[i - 1].sentTime >= 60000) {
 				_list.push(messageTime);
 			}
 			_list.push(listTemp[i]);
@@ -329,11 +329,11 @@
 	}
 
 	//img上传图片
-	var imgUpload = function(event) {
+	var imgUpload = function (event) {
 		var thisTarget = event.target || event.srcElement;
 		var _file = thisTarget.files;
-		for(var i = 0; i < _file.length; i++) {
-			RCS.imageStartUpload(_file[i], function(data) {
+		for (var i = 0; i < _file.length; i++) {
+			RCS.imageStartUpload(_file[i], function (data) {
 				console.log("文件上传完成：", data);
 				getFileUrl(data);
 			});
@@ -341,11 +341,11 @@
 		thisTarget.value = '';
 	}
 	//上传文件
-	var fileUpload = function(event) {
+	var fileUpload = function (event) {
 		var thisTarget = event.target || event.srcElement;
 		var _file = thisTarget.files;
-		for(var i = 0; i < _file.length; i++) {
-			RCS.fileStartUpload(_file[i], function(data) {
+		for (var i = 0; i < _file.length; i++) {
+			RCS.fileStartUpload(_file[i], function (data) {
 				console.log("文件上传完成：", data);
 				getFileUrl(data);
 			});
@@ -354,9 +354,9 @@
 	}
 
 	var urlItem = {
-		file: function(data) {
-			if(RCS.config.fileConfig && RCS.config.fileConfig.isPrivate) {
-				if(data.rc_url.type == 1) {
+		file: function (data) {
+			if (RCS.config.fileConfig && RCS.config.fileConfig.isPrivate) {
+				if (data.rc_url.type == 1) {
 					data.downloadUrl = data.rc_url.path;
 				} else {
 					data.downloadUrl = RCS.config.fileConfig.fileServer + data.rc_url.path;
@@ -366,20 +366,20 @@
 			} else {
 				var fileType = RongIMLib.FileType.FILE;
 				RongIMClient.getInstance().getFileUrl(fileType, data.filename, data.name, {
-					onSuccess: function(result) {
+					onSuccess: function (result) {
 						data.downloadUrl = result.downloadUrl;
 						var msg = messageItem[data.fileType](data);
 						sendMessage(msg);
 					},
-					onError: function(error) {
+					onError: function (error) {
 						showResult('getFileToken error:' + error);
 					}
 				});
 			}
 		},
-		image: function(data) {
-			if(RCS.config.upload && RCS.config.upload.isPrivate) {
-				if(data.rc_url.type == 1) {
+		image: function (data) {
+			if (RCS.config.upload && RCS.config.upload.isPrivate) {
+				if (data.rc_url.type == 1) {
 					data.downloadUrl = data.rc_url.path;
 				} else {
 					data.downloadUrl = RCS.config.upload.fileServer + data.rc_url.path;
@@ -389,12 +389,12 @@
 			} else {
 				var fileType = RongIMLib.FileType.IMAGE;
 				RongIMClient.getInstance().getFileUrl(fileType, data.filename, null, {
-					onSuccess: function(result) {
+					onSuccess: function (result) {
 						data.downloadUrl = result.downloadUrl;
 						var msg = messageItem[data.fileType](data);
 						sendMessage(msg);
 					},
-					onError: function(error) {
+					onError: function (error) {
 						console.log(error);
 					}
 				});
@@ -402,7 +402,7 @@
 		}
 	};
 	var messageItem = {
-		file: function(file) {
+		file: function (file) {
 			var name = file.name || '',
 				index = name.lastIndexOf('.') + 1,
 				type = name.substring(index);
@@ -413,7 +413,7 @@
 				fileUrl: file.downloadUrl
 			});
 		},
-		image: function(image) {
+		image: function (image) {
 			return new RongIMLib.ImageMessage({
 				content: image.thumbnail,
 				imageUri: image.downloadUrl
@@ -421,17 +421,17 @@
 		}
 	};
 
-	var getFileUrl = function(data) {
+	var getFileUrl = function (data) {
 		urlItem[data.fileType](data);
 	}
 
 	//关闭聊天窗口
-	var endConversation = function() {
+	var endConversation = function () {
 		$('.rcs-chat-wrapper')[0].innerHTML = '';
 	}
 
 	//预览图片
-	var viewImage = function(event) {
+	var viewImage = function (event) {
 		var thisTarget = event.target || event.srcElement;
 		var image = {
 			imageUrl: thisTarget.getAttribute('data-img')
@@ -439,31 +439,30 @@
 		$('.imageViewBox')[0].innerHTML = render(templates.imageView, image);
 		utils.fadein($('.imageViewBox')[0]);
 	}
-	var escImageView = function() {
+	var escImageView = function () {
 		$('.imageViewBox')[0].innerHTML = '';
 		utils.fadeout($('.imageViewBox')[0]);
 	}
-    
+
 	//sdk初始化
-	var sdkInit = function(params, callbacks) {
+	var sdkInit = function (params, callbacks) {
 		var appKey = params.appKey;
 		var token = params.token;
-		userId = params.userId;
 		RongIMLib.RongIMClient.init(appKey);
 
 		var instance = RongIMClient.getInstance();
 
 		// 连接状态监听器
 		RongIMClient.setConnectionStatusListener({
-			onChanged: function(status) {
+			onChanged: function (status) {
 				console.log(status);
 				var connectDom = $('.rcs-connect-status')[0];
-				if(connectDom) {
+				if (connectDom) {
 					connectDom.style.display = 'block';
 				}
-				switch(status) {
+				switch (status) {
 					case RongIMLib.ConnectionStatus.CONNECTED:
-						if(connectDom) {
+						if (connectDom) {
 							connectDom.style.display = 'none';
 						}
 						callbacks.getInstance && callbacks.getInstance(instance);
@@ -482,6 +481,7 @@
 						break;
 					case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
 						console.log('网络不可用');
+						reconnect();
 						break;
 					case RongIMLib.ConnectionStatus.DISCONNECTED:
 						console.log('断开连接');
@@ -498,10 +498,10 @@
 
 		RongIMClient.setOnReceiveMessageListener({
 			// 接收到的消息
-			onReceived: function(message) {
+			onReceived: function (message) {
 				// 判断消息类型
 				console.log("新消息: " + message.targetId);
-				if(message.offLineMessage) {
+				if (message.offLineMessage) {
 					return;
 				}
 				console.log(message);
@@ -511,7 +511,7 @@
 
 		//开始链接
 		RongIMClient.connect(token, {
-			onSuccess: function(userId) {
+			onSuccess: function (userId) {
 				console.log("链接成功，用户id：" + userId);
 				var messageName = 'PersonMessage'; // 消息名称
 				var objectName = 'TEST'; // 消息内置名称，请按照此格式命名
@@ -521,10 +521,10 @@
 				var prototypes = ['name']; // 消息类中的属性名
 				RongIMClient.registerMessageType(messageName, objectName, mesasgeTag, prototypes);
 			},
-			onTokenIncorrect: function() {
+			onTokenIncorrect: function () {
 				console.log('token无效');
 			},
-			onError: function(errorCode) {
+			onError: function (errorCode) {
 				console.log("=============================================");
 				console.log(errorCode);
 			}
@@ -532,42 +532,42 @@
 	}
 
 	//创建button
-	var createButton = function(config) {
+	var createButton = function (config) {
 		config.target.innerHTML = render(templates.button);
 		createIMConversation(config);
 		addListener(config);
 		adminUserRender();
 	}
 
-	var addListener = function(config) {
-		var callback = function(phoneOrPc) {
+	var addListener = function (config) {
+		var callback = function (phoneOrPc) {
 			terminal = phoneOrPc;
 		}
 		utils.browserRedirect(callback);
-		if(terminal == 'pc') {
-			document.body.onclick = function() {
+		if (terminal == 'pc') {
+			document.body.onclick = function () {
 				hideEmoji();
 			}
-			if(Notification.permission === "granted") {
+			if (Notification.permission === "granted") {
 				supportNot = true;
 			}
 			// Otherwise, we need to ask the user for permission
-			else if(Notification.permission !== "denied") {
-				Notification.requestPermission(function(permission) {
+			else if (Notification.permission !== "denied") {
+				Notification.requestPermission(function (permission) {
 					// If the user accepts, let's create a notification
-					if(permission === "granted") {
+					if (permission === "granted") {
 						supportNot = true;
 					}
 				});
 			}
 		} else {
-			document.body.ontouchstart = function(event) {
-				if(event.target.className.indexOf('emojiItem') < 0 && event.target.className.indexOf('rong-emoji-content') < 0 && event.target.className.indexOf('rongcloud-expressionContent') < 0) {
+			document.body.ontouchstart = function (event) {
+				if (event.target.className.indexOf('emojiItem') < 0 && event.target.className.indexOf('rong-emoji-content') < 0 && event.target.className.indexOf('rongcloud-expressionContent') < 0) {
 					hideEmoji();
 				}
-				if(event.target.className.indexOf('rongcloud-rong-btn') < 0 && event.target.className.indexOf('rongcloud-text') < 0) {
+				if (event.target.className.indexOf('rongcloud-rong-btn') < 0 && event.target.className.indexOf('rongcloud-text') < 0) {
 					var inputMsg = $(".rongcloud-text")[0];
-					if(inputMsg) {
+					if (inputMsg) {
 						inputMsg.blur();
 					}
 				}
@@ -575,22 +575,25 @@
 		}
 	}
 
-	var hideEmoji = function() {
+	var hideEmoji = function () {
 		var emojiContent = $('.rongcloud-expressionWrap')[0];
-		if(emojiContent) {
+		if (emojiContent) {
 			utils.hide(emojiContent);
 		}
 	}
 
 	//im组件初始化
-	var init = function(config) {
+	var init = function (config) {
 		RCS.config = config;
 		config.isIM = true;
+		userId = config.userId;
+		role = config.role;
+		role == 'custom' ? targetId = 'admin-' + userId : targetId = userId.substring(6,userId.length); 
 		var callbacks = {
-			getInstance: function(instance) {
-				var callback = function() {
-					if(RCS.config.templates) {
-						for(var index in RCS.config.templates) {
+			getInstance: function (instance) {
+				var callback = function () {
+					if (RCS.config.templates) {
+						for (var index in RCS.config.templates) {
 							templates[index] = RCS.config.templates[index];
 						}
 					}
@@ -605,9 +608,9 @@
 	}
 
 	//H5唤醒键盘的时候输入框显示在视野内
-	var keyboard = function(event) {
+	var keyboard = function (event) {
 		var thisTarget = event.target || event.srcElement;
-		setTimeout(function() {
+		setTimeout(function () {
 			thisTarget.scrollIntoView(true);
 		}, 500)
 	}
@@ -689,6 +692,26 @@
 		}
 	}
 
+	//断线重连
+	var reconnect = function () {
+		var callback = {
+			onSuccess: function (userId) {
+				console.log('reconnect success. ' + userId);
+			},
+			onTokenIncorrect: function () {
+				console.log('token 无效');
+			},
+			onError: function (errorCode) {
+				console.log(errorcode);
+			}
+		};
+		var config = {
+			auto: true,
+			url: 'cdn.ronghub.com/RongIMLib-2.5.1.min.js?d=' + Date.now(),
+			rate: [100, 1000, 3000, 6000, 10000]
+		};
+		RongIMClient.reconnect(callback, config);
+	}
 	//对外暴露
 	RCS.init = init;
 	RCS.send = send;
