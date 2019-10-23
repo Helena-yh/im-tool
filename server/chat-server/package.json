@@ -1,0 +1,34 @@
+{
+    "name": "chat-server",
+    "version": "1.0.0",
+    "description": "chat ",
+    "main": "./src/index.js",
+    "scripts": {
+      "eslint": "eslint .",
+      "precommit": "npm run eslint",
+      "serve": "node ./src/index.js"
+    },
+    "precommit": [
+      "npm run precommit"
+    ],
+    "repository": {
+      "type": "git"
+    },
+    "keywords": [
+      "sealrtc"
+    ],
+    "author": "yuhongda@rongcloud.cn",
+    "license": "MIT",
+    "devDependencies": {
+      "eslint": "^5.9.0"
+    },
+    "dependencies": {
+      "body-parser": "^1.18.3",
+      "cors": "^2.8.5",
+      "express": "^4.16.4",
+      "moment": "^2.24.0",
+      "rongcloud-sdk": "^3.0.1",
+      "underscore": "^1.9.1"
+    }
+  }
+  
