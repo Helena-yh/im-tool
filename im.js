@@ -186,6 +186,7 @@
 			messageList.innerHTML += render(templates.imMessageTemplate, messageTime);
 			conversation.lastSendTime = newMessage.sentTime;
 		}
+		newMessage.role = role;
 		messageList.innerHTML += render(templates.imMessageTemplate, newMessage);
 		messageList.scrollTop = messageList.scrollHeight;
 	}
@@ -245,6 +246,7 @@
 			var data = {};
 			var messageList = {};
 			messageList.firstEnter = true;
+			messageList.role = role;
 			messageList.list = modificateMessage(list);
 
 			data.messageList = render(templates.imMessage, messageList);

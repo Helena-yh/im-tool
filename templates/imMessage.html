@@ -4,7 +4,7 @@
     {%for(var index in this.list){%}{%switch(this.list[index].messageType){%}{%case 'TextMessage':%}
     <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
         <div class="rongcloud-Message-header">
-            {%if(this.list[index].messageDirection != 1){%} 
+            {%if((this.role == 'custom' && this.list[index].messageDirection == 1) || (this.role == 'admin' && this.list[index].messageDirection != 1)){%}                  
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">
             {%}else{%}
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">
@@ -20,7 +20,7 @@
     <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
         <div>
             <div class="rongcloud-Message-header">
-                {%if(this.list[index].messageDirection != 1){%} 
+                {%if((this.role == 'custom' && this.list[index].messageDirection == 1) || (this.role == 'admin' && this.list[index].messageDirection != 1)){%}                  
                 <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">
                 {%}else{%}
                 <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">
@@ -40,7 +40,7 @@
     {%case 'FileMessage':%}
     <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
         <div class="rongcloud-Message-header">                
-            {%if(this.list[index].messageDirection != 1){%}                  
+            {%if((this.role == 'custom' && this.list[index].messageDirection == 1) || (this.role == 'admin' && this.list[index].messageDirection != 1)){%}                                
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">                 
             {%}else{%}                 
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">                 
@@ -58,7 +58,7 @@
     {%case 'VoiceMessage':%}
     <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
         <div class="rongcloud-Message-header">                
-            {%if(this.list[index].messageDirection != 1){%}                  
+            {%if((this.role == 'custom' && this.list[index].messageDirection == 1) || (this.role == 'admin' && this.list[index].messageDirection != 1)){%}                                  
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">                 
             {%}else{%}                 
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">                 
@@ -94,7 +94,7 @@
     {%default: %}
     <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
         <div class="rongcloud-Message-header">                
-            {%if(this.list[index].messageDirection != 1){%}                  
+            {%if((this.role == 'custom' && this.list[index].messageDirection == 1) || (this.role == 'admin' && this.list[index].messageDirection != 1)){%}                  
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">                 
             {%}else{%}                 
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">                 

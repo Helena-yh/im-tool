@@ -5,7 +5,7 @@ class="rongcloud-audioBox" 声音消息容器
 {%switch(this.messageType){%}{%case 'TextMessage':%}
 <div class="rongcloud-Message rongcloud-clearfix {%if(this.messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
     <div class="rongcloud-Message-header">                
-        {%if(this.messageDirection != 1){%}                  
+        {%if((this.role == 'custom' && this.messageDirection == 1) || (this.role == 'admin' && this.messageDirection != 1)){%}                  
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">                 
         {%}else{%}                 
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">                 
@@ -20,7 +20,7 @@ class="rongcloud-audioBox" 声音消息容器
 {%case 'ImageMessage':%}
 <div class="rongcloud-Message rongcloud-clearfix {%if(this.messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
     <div class="rongcloud-Message-header">                
-        {%if(this.messageDirection != 1){%}                  
+        {%if((this.role == 'custom' && this.messageDirection == 1) || (this.role == 'admin' && this.messageDirection != 1)){%}                
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">                 
         {%}else{%}                 
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">                 
@@ -39,7 +39,7 @@ class="rongcloud-audioBox" 声音消息容器
 {%case 'FileMessage':%}
 <div class="rongcloud-Message rongcloud-clearfix {%if(this.messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
     <div class="rongcloud-Message-header">                
-        {%if(this.messageDirection != 1){%}                  
+        {%if((this.role == 'custom' && this.messageDirection == 1) || (this.role == 'admin' && this.messageDirection != 1)){%}                
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">                 
         {%}else{%}                 
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">                 
@@ -57,7 +57,7 @@ class="rongcloud-audioBox" 声音消息容器
 {%case 'VoiceMessage':%}
 <div class="rongcloud-Message rongcloud-clearfix {%if(this.messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
     <div class="rongcloud-Message-header">                
-        {%if(this.messageDirection != 1){%}                  
+        {%if((this.role == 'custom' && this.messageDirection == 1) || (this.role == 'admin' && this.messageDirection != 1)){%}                
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">                 
         {%}else{%}                 
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">                 
