@@ -15,6 +15,13 @@ var ErrorInfo = {
   }
 }
 
+var QuestionError = {
+  NOT_EXIST: {
+    code: 50001,
+    msg: 'Not exist'
+  }
+}
 module.exports = {
   ErrorInfo,
+  QuestionError
 };
