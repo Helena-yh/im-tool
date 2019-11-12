@@ -4,13 +4,13 @@
     {%for(var index in this.list){%}{%switch(this.list[index].messageType){%}{%case 'TextMessage':%}
     <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
         <div class="rongcloud-Message-header">
-            {%if(this.list[index].messageDirection != 1){%} 
+            {%if((this.role == 'custom' && this.list[index].messageDirection == 1) || (this.role == 'admin' && this.list[index].messageDirection != 1)){%}                  
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">
             {%}else{%}
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">
             {%}%}
         </div>
-        <div class="rongcloud-Message-body">
+        <div class="rongcloud-Message-body rongcloud-Message-after">
             <div class="rongcloud-Message-text">
                 <pre class="rongcloud-Message-entry">{%this.list[index].content.content%}</pre>
             </div>
@@ -20,7 +20,7 @@
     <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
         <div>
             <div class="rongcloud-Message-header">
-                {%if(this.list[index].messageDirection != 1){%} 
+                {%if((this.role == 'custom' && this.list[index].messageDirection == 1) || (this.role == 'admin' && this.list[index].messageDirection != 1)){%}                  
                 <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">
                 {%}else{%}
                 <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">
@@ -40,13 +40,13 @@
     {%case 'FileMessage':%}
     <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
         <div class="rongcloud-Message-header">                
-            {%if(this.list[index].messageDirection != 1){%}                  
+            {%if((this.role == 'custom' && this.list[index].messageDirection == 1) || (this.role == 'admin' && this.list[index].messageDirection != 1)){%}                                
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">                 
             {%}else{%}                 
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">                 
             {%}%}
         </div>
-        <div class="rongcloud-Message-body">
+        <div class="rongcloud-Message-body rongcloud-Message-after">
             <div class="rongcloud-Message-file">
                 <div class="rongcloud-sprite rongcloud-file-icon"></div>
                 <div class="rongcloud-file-name">{%this.list[index].content.name%}</div>
@@ -58,13 +58,13 @@
     {%case 'VoiceMessage':%}
     <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
         <div class="rongcloud-Message-header">                
-            {%if(this.list[index].messageDirection != 1){%}                  
+            {%if((this.role == 'custom' && this.list[index].messageDirection == 1) || (this.role == 'admin' && this.list[index].messageDirection != 1)){%}                                  
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">                 
             {%}else{%}                 
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">                 
             {%}%}
         </div>
-        <div class="rongcloud-Message-body">
+        <div class="rongcloud-Message-body rongcloud-Message-after">
             <div class="rongcloud-Message-audio">
                 <span class="rongcloud-Message-entry">
                     {%if(this.messageDirection == 1){%}
@@ -94,13 +94,13 @@
     {%default: %}
     <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
         <div class="rongcloud-Message-header">                
-            {%if(this.list[index].messageDirection != 1){%}                  
+            {%if((this.role == 'custom' && this.list[index].messageDirection == 1) || (this.role == 'admin' && this.list[index].messageDirection != 1)){%}                  
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">                 
             {%}else{%}                 
             <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">                 
             {%}%}
         </div>
-        <div class="rongcloud-Message-body">
+        <div class="rongcloud-Message-body rongcloud-Message-after">
             <div class="rongcloud-Message-text">
                 <pre class="rongcloud-Message-entry">当前版本暂不支持查看此消息</pre>
             </div>

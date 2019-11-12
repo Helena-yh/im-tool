@@ -5,13 +5,13 @@ class="rongcloud-audioBox" 声音消息容器
 {%switch(this.messageType){%}{%case 'TextMessage':%}
 <div class="rongcloud-Message rongcloud-clearfix {%if(this.messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
     <div class="rongcloud-Message-header">                
-        {%if(this.messageDirection != 1){%}                  
+        {%if((this.role == 'custom' && this.messageDirection == 1) || (this.role == 'admin' && this.messageDirection != 1)){%}                  
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">                 
         {%}else{%}                 
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">                 
         {%}%}
     </div>
-    <div class="rongcloud-Message-body">
+    <div class="rongcloud-Message-body rongcloud-Message-after">
         <div class="rongcloud-Message-text">
             <pre class="rongcloud-Message-entry">{%this.content.content%}</pre>
         </div>
@@ -20,7 +20,7 @@ class="rongcloud-audioBox" 声音消息容器
 {%case 'ImageMessage':%}
 <div class="rongcloud-Message rongcloud-clearfix {%if(this.messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
     <div class="rongcloud-Message-header">                
-        {%if(this.messageDirection != 1){%}                  
+        {%if((this.role == 'custom' && this.messageDirection == 1) || (this.role == 'admin' && this.messageDirection != 1)){%}                
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">                 
         {%}else{%}                 
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">                 
@@ -39,13 +39,13 @@ class="rongcloud-audioBox" 声音消息容器
 {%case 'FileMessage':%}
 <div class="rongcloud-Message rongcloud-clearfix {%if(this.messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
     <div class="rongcloud-Message-header">                
-        {%if(this.messageDirection != 1){%}                  
+        {%if((this.role == 'custom' && this.messageDirection == 1) || (this.role == 'admin' && this.messageDirection != 1)){%}                
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">                 
         {%}else{%}                 
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">                 
         {%}%}
     </div>
-    <div class="rongcloud-Message-body">
+    <div class="rongcloud-Message-body rongcloud-Message-after">
         <div class="rongcloud-Message-file">
             <div class="rongcloud-sprite rongcloud-file-icon"></div>
             <div class="rongcloud-file-name">{%this.content.name%}</div>
@@ -57,13 +57,13 @@ class="rongcloud-audioBox" 声音消息容器
 {%case 'VoiceMessage':%}
 <div class="rongcloud-Message rongcloud-clearfix {%if(this.messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
     <div class="rongcloud-Message-header">                
-        {%if(this.messageDirection != 1){%}                  
+        {%if((this.role == 'custom' && this.messageDirection == 1) || (this.role == 'admin' && this.messageDirection != 1)){%}                
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/user.png" alt="">                 
         {%}else{%}                 
         <img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="../images/rongcloud.png" alt="">                 
         {%}%}
     </div>
-    <div class="rongcloud-Message-body">
+    <div class="rongcloud-Message-body rongcloud-Message-after">
         <div class="rongcloud-Message-audio">
             <span class="rongcloud-Message-entry">
                 {%if(this.messageDirection == 1){%}
@@ -97,7 +97,7 @@ class="rongcloud-audioBox" 声音消息容器
 
         </div>
     </div>
-    <div class="rongcloud-Message-body">
+    <div class="rongcloud-Message-body rongcloud-Message-after">
         <div class="rongcloud-Message-text">
             <pre class="rongcloud-Message-entry">当前版本暂不支持查看此消息</pre>
         </div>
