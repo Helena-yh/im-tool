@@ -8,7 +8,7 @@ var ENUM = require('../enum');
 var ErrorInfo = ENUM.QuestionError; 
 
 
-router.post('/add', function(req, res, next){
+router.post('/add', (req, res, next) => {
     var description = req.body.description,
         solution = req.body.solution,
         status = req.body.status;
@@ -16,38 +16,51 @@ router.post('/add', function(req, res, next){
         description: description,
         solution: solution,
         status: status 
-    }).then(function(){
+    }).then(() => {
         return res.send(new APIResult(200));
-    }).catch(function(){
+    }).catch(() => {
         next();
     })
 })
 
-router.post('/delete', function(req, res, next){
+router.post('/delete', (req, res, next) => {
     var questionId = req.body.questionId;
-    return Question.destroy({
+    
+    return Question.findOne({
         where: {
             id: questionId
+        },
+        attributes: ['id', 'description', 'solution', 'status']
+    }).then((result) => {
+        if(!result){
+            return res.send(ErrorInfo.NOT_EXIST);
         }
-    }).then(function(){
-        return res.send(new APIResult(200));
-    }).catch(function(){
+        return Question.destroy({
+            where: {
+                id: questionId
+            }
+        }).then(() => {
+            return res.send(new APIResult(200));
+        }).catch(() => {
+            next();
+        })
+    }).catch(() => {
         next();
     })
 })
 
-router.get('/search_all', function(req, res, next){
+router.get('/search_all', (req, res, next) => {
     var questionId = req.body.questionId;
     return Question.findAll({
         attributes: ['id', 'description', 'solution', 'status']
-    }).then(function(result){
+    }).then((result) => {
         return res.send(new APIResult(200, result));
-    }).catch(function(){
+    }).catch(() => {
         next();
     })
 })
 
-router.post('/modify', function(req, res, next){
+router.post('/modify', (req, res, next) => {
     var questionId = req.body.questionId,
     description = req.body.description,
     solution = req.body.solution,
@@ -57,7 +70,7 @@ router.post('/modify', function(req, res, next){
             id: questionId
         },
         attributes: ['id', 'description', 'solution', 'status']
-    }).then(function(result){
+    }).then((result) => {
         if(!result){
             return res.send(ErrorInfo.NOT_EXIST);
         }
@@ -69,10 +82,10 @@ router.post('/modify', function(req, res, next){
             where: {
                 id: questionId
             }
-        }).then(function() {
+        }).then(() => {
             return res.send(new APIResult(200));
         })
-    }).catch(function(){
+    }).catch(() => {
         next();
     })
 })

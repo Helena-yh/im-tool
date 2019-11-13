@@ -10,7 +10,7 @@
 6 silly lifecycle chat-server@1.0.0~preserve: no script for preserve, continuing
 7 info lifecycle chat-server@1.0.0~serve: chat-server@1.0.0
 8 verbose lifecycle chat-server@1.0.0~serve: unsafe-perm in lifecycle true
-9 verbose lifecycle chat-server@1.0.0~serve: PATH: /Users/rc/.nvm/versions/node/v6.9.5/lib/node_modules/npm/bin/node-gyp-bin:/Applications/work/easy-chat/im-tool/server/chat-server/node_modules/.bin:/Users/rc/.nvm/versions/node/v6.9.5/bin:/Library/Frameworks/Python.framework/Versions/3.7/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin:/Applications/VMware Fusion.app/Contents/Public:/Applications/Wireshark.app/Contents/MacOS:/Users/rc/GitReview/arcanist/bin/
+9 verbose lifecycle chat-server@1.0.0~serve: PATH: /Users/rc/.nvm/versions/node/v6.9.5/lib/node_modules/npm/bin/node-gyp-bin:/Applications/work/easy-chat/im-tool/server/chat-server/node_modules/.bin:/Users/rc/.nvm/versions/node/v6.9.5/bin:/Library/Frameworks/Python.framework/Versions/3.7/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/Applications/Wireshark.app/Contents/MacOS:/Users/rc/GitReview/arcanist/bin/
 10 verbose lifecycle chat-server@1.0.0~serve: CWD: /Applications/work/easy-chat/im-tool/server/chat-server
 11 silly lifecycle chat-server@1.0.0~serve: Args: [ '-c', 'node ./src/index.js' ]
 12 silly lifecycle chat-server@1.0.0~serve: Returned: code: 1  signal: null

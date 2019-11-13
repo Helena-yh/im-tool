@@ -48,13 +48,5 @@ Question = sequelize.define('question', {
     }
 })
 
-Question.sync({force: true}).then(() => {
-    // 表已创建
-    return Question.create({
-        description: 'John',
-        solution: 'Hancock',
-        status: 1
-    });
-  });
 
 module.exports = [sequelize, Question]

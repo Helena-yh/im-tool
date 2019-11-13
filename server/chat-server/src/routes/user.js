@@ -18,7 +18,7 @@ var RongSDK = require('rongcloud-sdk')({
 });
 var User = RongSDK.User;
 
-var getNormalToken = function (user) {
+var getNormalToken = (user) =>  {
   return User.register(user);
 };
 
