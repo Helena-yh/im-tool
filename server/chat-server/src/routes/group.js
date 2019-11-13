@@ -6,8 +6,7 @@ var APIResult = utils.APIResult;
 var Cache = utils.Cache;
 
 var Enum = require('../enum');
-var ErrorInfo = Enum.ErrorInfo;
-
+var ErrorInfo = Enum.GroupError;
 var moment = require('moment');
 var Config = require('../conf');
 
@@ -17,11 +16,45 @@ var RongSDK = require('rongcloud-sdk')({
 	api: Config.RONGCLOUD_SERVER_API || 'http://api.cn.ronghub.com'
 });
 var Group = RongSDK.Group;
+var MuteMembers = Group.Gag;
 
 //创建
 var createGroup = (group) => {
 	return new Promise((resolve, reject) => {
 		Group.create(group).then(result => {
+			console.log(result);
+			resolve(result)
+		}, error => {
+			console.log(error);
+			reject(JSON.stringify(error))
+		});
+	})
+}
+var getGroup = (group) => {
+	return new Promise((resolve, reject) => {
+		Group.get(group).then(result => {
+			console.log(result);
+			resolve(result)
+		}, error => {
+			console.log(error);
+			reject(JSON.stringify(error))
+		});
+	})
+}
+var joinGroup = (group) => {
+	return new Promise((resolve, reject) => {
+		Group.get(group).then(result => {
+			console.log(result);
+			resolve(result)
+		}, error => {
+			console.log(error);
+			reject(JSON.stringify(error))
+		});
+	})
+}
+var muteMembers = (group) => {
+	return new Promise((resolve, reject) => {
+		MuteMembers.add(group).then(result => {
 			console.log(result);
 			resolve(result)
 		}, error => {
@@ -59,42 +92,63 @@ router.post('/create', (req, res, next) =>{
 //加入
 router.post('/join', (req, res, next) => {
 	var id = req.body.id,
-		name = req.body.name,
 		memberId = req.body.memberId;
 	var group = {
 		id: id,
-		name: name,
-		memberId: memberId
-	}
-	return Group.join(group).then((result) => {
-		if(result.code == 200){
-			return res.send(new APIResult(200));
+		member: {
+			id: memberId
 		}
-	}).catch((error) => {
-		next(error)
+	}
+	console.log(group)
+	return getGroup(group).then((result) => {
+		if(result.code == 200){
+			if(result.members.length == 0){
+				return res.send(ErrorInfo.NOT_EXIST);
+			}
+			return joinGroup(group).then((result) => {
+				if(result.code == 200){
+					return res.send(new APIResult(200));
+				}
+			}).catch((error) => {
+				console.log('err:',error)
+				next();
+			})
+		}
 	})
 })
 
 //禁言
 router.post('/mute', (req, res, next) => {
 	var id = req.body.id,
-		name = req.body.name,
+		minute = req.body.minute,
 		memberIds = req.body.memberIds,
 		members = [];
-		memberIds.forEach(id => {
-			members.push({
-				id: id.toString()
-			})
-		})
+	memberIds.forEach( (member) => {
+		members.push({id: member})
+	})
 	var group = {
 		id: id,
-		name: name,
-		members: members
+		members: members,
+		minute: minute
 	};
-	return Group.join(group).then((result) => {
-		return res.send(new APIResult(200, result));
-	}).catch((error) => {
-		next(error)
+	if(minute < 1 || minute > 30 * 24 * 60){
+		return res.send(ErrorInfo.MIUTE_ILLEGAL);
+	}
+	return getGroup(group).then((result) => {
+		if(result.code == 200){
+			if(result.members.length == 0){
+				return res.send(ErrorInfo.NOT_EXIST);
+			}
+			muteMembers(group).then((result)=> {
+				if(result.code == 200){
+					return res.send(new APIResult(200));
+				}
+			}).catch((error) => {
+				console.log('err:',error)
+				next();
+			})
+		}
 	})
+	
 })
 module.exports = router;

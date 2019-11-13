@@ -36,7 +36,7 @@
 
 |参数|说明|数据类型|是否必填|
 |---|----|------|------|
-|questionId|问题 Id |Number| 是|
+|id|问题 Id |Number| 是|
 |description|问题描述 |String| 否|
 |solution|解决方案 |String| 否|
 |status|问题状态 |Number| 否|
@@ -59,7 +59,7 @@ description、solution、status 传哪个修改哪个，不传为不修改
 
 |参数|说明|数据类型|是否必填|
 |---|----|------|------|
-|questionId|问题 Id |Number| 是|
+|id|问题 Id |Number| 是|
 
 #### 返回结果
 

@@ -24,7 +24,7 @@ router.post('/add', (req, res, next) => {
 })
 
 router.post('/delete', (req, res, next) => {
-    var questionId = req.body.questionId;
+    var questionId = req.body.id;
     
     return Question.findOne({
         where: {
@@ -61,7 +61,7 @@ router.get('/search_all', (req, res, next) => {
 })
 
 router.post('/modify', (req, res, next) => {
-    var questionId = req.body.questionId,
+    var questionId = req.body.id,
     description = req.body.description,
     solution = req.body.solution,
     status = req.body.status;

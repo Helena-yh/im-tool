@@ -17,11 +17,24 @@ var ErrorInfo = {
 
 var QuestionError = {
   NOT_EXIST: {
-    code: 50001,
-    msg: 'Not exist'
+    code: 50000,
+    msg: 'Question id not exist'
   }
 }
+
+var GroupError = {
+  NOT_EXIST: {
+    code: 50100,
+    msg: 'Group not exist'
+  },
+  MIUTE_ILLEGAL: {
+    code: 50100,
+    msg: 'Illegal parameter minute'
+  }
+}
+
 module.exports = {
   ErrorInfo,
-  QuestionError
+  QuestionError,
+  GroupError
 };
