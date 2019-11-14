@@ -17,6 +17,7 @@
 
 |参数|说明|数据类型|是否必填|
 |---|----|------|------|
+|groupId|群组 Id |String| 是|
 |description|问题描述 |String| 是|
 |solution|解决方案 |String| 是|
 
@@ -75,7 +76,9 @@ description、solution、status 传哪个修改哪个，不传为不修改
 
 #### 请求参数
 
-无
+|参数|说明|数据类型|是否必填|
+|---|----|------|------|
+|groupId|群组 Id |String| 是|
 
 #### 返回结果
 
@@ -84,13 +87,15 @@ description、solution、status 传哪个修改哪个，不传为不修改
     "code":200,
     "result": [
         {
-            "id": 1,
+            "id": 1, // 问题 id
+            "groupId": "test1", // 群组 id
             "description": "John",
             "solution": "Hancock",
             "status": 1
         },
         {
             "id": 3,
+            "groupId": "test1",
             "description": "a4234",
             "solution": "solution",
             "status": 1

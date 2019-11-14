@@ -28,8 +28,12 @@ var GroupError = {
     msg: 'Group not exist'
   },
   MIUTE_ILLEGAL: {
-    code: 50100,
+    code: 50101,
     msg: 'Illegal parameter minute'
+  },
+  EXISTED: {
+    code: 50102,
+    msg: 'Group already exists'
   }
 }
 

@@ -10,10 +10,12 @@ var ErrorInfo = ENUM.QuestionError;
 
 router.post('/add', (req, res, next) => {
     var description = req.body.description,
+        groupId = req.body.groupId,
         solution = req.body.solution,
         status = req.body.status;
     return Question.create({
         description: description,
+        groupId: groupId,
         solution: solution,
         status: status 
     }).then(() => {
@@ -49,11 +51,15 @@ router.post('/delete', (req, res, next) => {
     })
 })
 
-router.get('/search_all', (req, res, next) => {
-    var questionId = req.body.questionId;
+router.post('/search_all', (req, res, next) => {
+    var groupId = req.body.groupId;
     return Question.findAll({
-        attributes: ['id', 'description', 'solution', 'status']
+        where: {
+            groupId: groupId 
+        },
+        attributes: ['id','groupId', 'description', 'solution', 'status']
     }).then((result) => {
+        console.log('---',result)
         return res.send(new APIResult(200, result));
     }).catch(() => {
         next();

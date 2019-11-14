@@ -1,5 +1,8 @@
+var ref = require('../db'), Group = ref[2];
+var Sequelize =  require('sequelize');
 var express = require('express');
 var router = express.Router();
+var Op = Sequelize.Op;
 
 var utils = require('../utils');
 var APIResult = utils.APIResult;
@@ -15,13 +18,13 @@ var RongSDK = require('rongcloud-sdk')({
 	secret: Config.RONGCLOUD_SECRET,
 	api: Config.RONGCLOUD_SERVER_API || 'http://api.cn.ronghub.com'
 });
-var Group = RongSDK.Group;
-var MuteMembers = Group.Gag;
+var RongGroup = RongSDK.Group;
+var MuteMembers = RongGroup.Gag;
 
 //创建
 var createGroup = (group) => {
 	return new Promise((resolve, reject) => {
-		Group.create(group).then(result => {
+		RongGroup.create(group).then(result => {
 			console.log(result);
 			resolve(result)
 		}, error => {
@@ -32,7 +35,7 @@ var createGroup = (group) => {
 }
 var getGroup = (group) => {
 	return new Promise((resolve, reject) => {
-		Group.get(group).then(result => {
+		RongGroup.get(group).then(result => {
 			console.log(result);
 			resolve(result)
 		}, error => {
@@ -43,7 +46,7 @@ var getGroup = (group) => {
 }
 var joinGroup = (group) => {
 	return new Promise((resolve, reject) => {
-		Group.get(group).then(result => {
+		RongGroup.get(group).then(result => {
 			console.log(result);
 			resolve(result)
 		}, error => {
@@ -55,6 +58,18 @@ var joinGroup = (group) => {
 var muteMembers = (group) => {
 	return new Promise((resolve, reject) => {
 		MuteMembers.add(group).then(result => {
+			console.log(result);
+			resolve(result)
+		}, error => {
+			console.log(error);
+			reject(JSON.stringify(error))
+		});
+	})
+}
+var unmuteMembers = (group) => {
+	console.log('unmuteMembers',group)
+	return new Promise((resolve, reject) => {
+		MuteMembers.remove(group).then(result => {
 			console.log(result);
 			resolve(result)
 		}, error => {
@@ -141,7 +156,20 @@ router.post('/mute', (req, res, next) => {
 			}
 			muteMembers(group).then((result)=> {
 				if(result.code == 200){
-					return res.send(new APIResult(200));
+					return Group.findOne({
+						where: {
+							id: id
+						}
+					}).then((group) => {
+						if(group){
+							return res.send(ErrorInfo.EXISTED);
+						}
+						return Group.create({
+							id: id,
+						}).then(() => {
+							return res.send(new APIResult(200));
+						})
+					})
 				}
 			}).catch((error) => {
 				console.log('err:',error)
@@ -150,5 +178,63 @@ router.post('/mute', (req, res, next) => {
 		}
 	})
 	
+})
+
+//设置禁言状态
+router.post('/set_mute_status', (req, res, next) => {
+	var id = req.body.id,
+		memberIds = req.body.memberIds,
+		muteStatus = req.body.muteStatus;
+	var members = [];
+	memberIds.forEach( (member) => {
+		members.push({id: member})
+	})
+
+	var group = {
+		id: id,
+		members: members,
+	};
+	return getGroup(group).then((result) => {
+		if(result.code == 200){
+			if(result.members.length == 0){
+				return res.send(ErrorInfo.NOT_EXIST);
+			}
+			unmuteMembers(group).then((result)=> {
+				if(result.code == 200){
+					return Group.update({
+						muteStatus: muteStatus
+					},{
+						where: {
+							id: id
+						}
+					}).then(() => {
+						return res.send(new APIResult(200));
+					})
+				}
+			}).catch((error) => {
+				console.log('err:',error)
+				next();
+			})
+		}
+	})
+})
+
+//查询群禁言状态
+router.post('/get_infos', (req, res, next) => {
+	var ids = req.body.ids,
+		groupIds = [];
+	console.log(typeof groupIds)
+	ids.forEach( (id) => {
+		groupIds.push({id:id})
+	})
+	console.log('op--',Op)
+	return Group.findAll({
+        where: {
+			[Op.or]: groupIds
+        },
+        attributes: ['id', 'muteStatus']
+    }).then( (infos) => {
+		return res.send(new APIResult(200,infos));
+	})
 })
 module.exports = router;

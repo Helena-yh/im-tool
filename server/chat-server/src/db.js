@@ -18,18 +18,23 @@ sequelize = new Sequelize(Config.DB_NAME, Config.DB_USER, Config.DB_PASSWORD, {
 });
 
 // 测试连接
-// sequelize.authenticate().then(() => {
-// console.log('Connection has been established successfully.');
-// })
-// .catch(err => {
-// console.error('Unable to connect to the database:', err);
-// });
+sequelize.authenticate().then(() => {
+console.log('Connection has been established successfully.');
+})
+.catch(err => {
+console.error('Unable to connect to the database:', err);
+});
 
 Question = sequelize.define('question', {
     id: {
         type: Sequelize.INTEGER.UNSIGNED,
         primaryKey: true,
         autoIncrement: true
+    },
+    groupId: {
+        type: Sequelize.STRING(256),
+        allowNull: false,
+        defaultValue: ''
     },
     description: {
         type: Sequelize.STRING(256),
@@ -48,5 +53,24 @@ Question = sequelize.define('question', {
     }
 })
 
+Group = sequelize.define('groups', {
+    id: {
+        type: Sequelize.STRING(32),
+        primaryKey: true,
+        allowNull: false,
+        defaultValue: ''
+    },
+    muteStatus: {
+        type: Sequelize.INTEGER.UNSIGNED,
+        allowNull: false,
+        defaultValue: 0 // 0 未禁言、1 禁言
+    }
+})
 
-module.exports = [sequelize, Question]
+// sequelize.sync({force: true}).then(()=>{
+//     console.log('2222')
+// }).catch((err)=>{
+//     console.log('err',err)
+// })
+
+module.exports = [sequelize, Question, Group]
