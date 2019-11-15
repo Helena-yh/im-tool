@@ -46,7 +46,7 @@ var getGroup = (group) => {
 }
 var joinGroup = (group) => {
 	return new Promise((resolve, reject) => {
-		RongGroup.get(group).then(result => {
+		RongGroup.join(group).then(result => {
 			console.log(result);
 			resolve(result)
 		}, error => {
@@ -166,6 +166,7 @@ router.post('/mute', (req, res, next) => {
 						}
 						return Group.create({
 							id: id,
+							muteStatus: 1
 						}).then(() => {
 							return res.send(new APIResult(200));
 						})
@@ -199,22 +200,35 @@ router.post('/set_mute_status', (req, res, next) => {
 			if(result.members.length == 0){
 				return res.send(ErrorInfo.NOT_EXIST);
 			}
-			unmuteMembers(group).then((result)=> {
-				if(result.code == 200){
-					return Group.update({
-						muteStatus: muteStatus
-					},{
-						where: {
-							id: id
-						}
-					}).then(() => {
-						return res.send(new APIResult(200));
-					})
-				}
-			}).catch((error) => {
-				console.log('err:',error)
-				next();
-			})
+			if(muteStatus == 0){
+				unmuteMembers(group).then((result)=> {
+					if(result.code == 200){
+						return Group.update({
+							muteStatus: muteStatus
+						},{
+							where: {
+								id: id
+							}
+						}).then(() => {
+							return res.send(new APIResult(200));
+						})
+					}
+				}).catch((error) => {
+					console.log('err:',error)
+					next();
+				})
+			}else {
+				return Group.update({
+					muteStatus: muteStatus
+				},{
+					where: {
+						id: id
+					}
+				}).then(() => {
+					return res.send(new APIResult(200));
+				})
+			}
+			
 		}
 	})
 })
@@ -227,13 +241,24 @@ router.post('/get_infos', (req, res, next) => {
 	ids.forEach( (id) => {
 		groupIds.push({id:id})
 	})
-	console.log('op--',Op)
 	return Group.findAll({
         where: {
 			[Op.or]: groupIds
         },
         attributes: ['id', 'muteStatus']
     }).then( (infos) => {
+		var arrId = [];
+		infos.forEach( (infos) => {
+			arrId.push(infos.id)
+		})
+		ids.forEach( (id) => {
+			if(arrId.indexOf(id) == -1){
+				infos.push({
+					"id": id,
+					"muteStatus": 0
+				})
+			}
+		})
 		return res.send(new APIResult(200,infos));
 	})
 })

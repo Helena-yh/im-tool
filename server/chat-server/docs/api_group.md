@@ -5,6 +5,8 @@
 | [/group/create](#post-groupcreate) | 创建群组 |
 | [/group/join](#post-groupjoin) | 加入群组 |
 | [/group/mute](#post-groupmute) | 禁言群成员 |
+| [/group/set_mute_status](#post-groupmuteset_mute_status) | 设置禁言状态 |
+| [/group/get_infos](#post-getinfos) | 查询群信息 |
 
 
 ## API 说明
