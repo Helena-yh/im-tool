@@ -60,15 +60,25 @@ Group = sequelize.define('groups', {
         allowNull: false,
         defaultValue: ''
     },
+    groupName: {
+        type: Sequelize.STRING(128),
+        allowNull: false,
+        defaultValue: ''
+    },
     muteStatus: {
         type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
         defaultValue: 0 // 0 未禁言、1 禁言
+    },
+    clientIds: {
+        type: Sequelize.STRING(256),
+        allowNull: false,
+        defaultValue: ''
     }
 })
 
 // sequelize.sync({force: true}).then(()=>{
-//     console.log('2222')
+//     console.log('force update sucess')
 // }).catch((err)=>{
 //     console.log('err',err)
 // })

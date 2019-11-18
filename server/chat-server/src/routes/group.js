@@ -78,6 +78,7 @@ var unmuteMembers = (group) => {
 		});
 	})
 }
+
 router.post('/create', (req, res, next) =>{
 	var id = req.body.id,
 		name = req.body.name,
@@ -104,159 +105,153 @@ router.post('/create', (req, res, next) =>{
 	
 })
 
-//加入
+// 加入
 router.post('/join', (req, res, next) => {
-	var id = req.body.id,
-		memberId = req.body.memberId;
-	var group = {
-		id: id,
-		member: {
-			id: memberId
-		}
-	}
-	console.log(group)
-	return getGroup(group).then((result) => {
-		if(result.code == 200){
-			if(result.members.length == 0){
-				return res.send(ErrorInfo.NOT_EXIST);
-			}
-			return joinGroup(group).then((result) => {
-				if(result.code == 200){
-					return res.send(new APIResult(200));
-				}
-			}).catch((error) => {
-				console.log('err:',error)
-				next();
-			})
-		}
-	})
-})
-
-//禁言
-router.post('/mute', (req, res, next) => {
-	var id = req.body.id,
-		minute = req.body.minute,
+	var groupId = req.body.groupId,
 		memberIds = req.body.memberIds,
+		groupName = req.body.groupName,
+		clientIds = req.body.clientIds,
 		members = [];
-	memberIds.forEach( (member) => {
-		members.push({id: member})
+	memberIds.forEach( (id) => {
+		members.push({
+			id: id.toString()
+		})
 	})
 	var group = {
-		id: id,
-		members: members,
-		minute: minute
+		id: groupId,
+		name: groupName || 'default',
+		members: members
 	};
-	if(minute < 1 || minute > 30 * 24 * 60){
-		return res.send(ErrorInfo.MIUTE_ILLEGAL);
-	}
-	return getGroup(group).then((result) => {
-		if(result.code == 200){
-			if(result.members.length == 0){
-				return res.send(ErrorInfo.NOT_EXIST);
-			}
-			muteMembers(group).then((result)=> {
+	return Group.findOne({
+		where: {
+			id: groupId
+		}
+	}).then((result) => {
+		if(!result){
+			//没有群组创建
+			console.log('c g',group)
+			return createGroup(group).then((result) => {
 				if(result.code == 200){
-					return Group.findOne({
-						where: {
-							id: id
-						}
-					}).then((group) => {
-						if(group){
-							return res.send(ErrorInfo.EXISTED);
-						}
-						return Group.create({
-							id: id,
-							muteStatus: 1
-						}).then(() => {
-							return res.send(new APIResult(200));
-						})
+					return Group.create({
+						id: groupId,
+						groupName: groupName || '',
+						clientIds: JSON.stringify(clientIds) || '',
+					}).then(() => {
+						return res.send(new APIResult(200));
 					})
 				}
+			}).catch((err) => {
+				console.log('create g err',err)
+			})
+		}else {
+			//有群组加入
+			group = {
+				id: groupId,
+				member: {
+					id: memberIds[0]
+				}
+			}
+			console.log('group',group)
+			return joinGroup(group).then((result) => {
+				console.log('jg',result)
+				if(result.code == 200){
+					return res.send(new APIResult(200));
+				}
 			}).catch((error) => {
-				console.log('err:',error)
-				next();
+				console.log('join g err',error)
 			})
 		}
+
+	}).catch((err) => {
+		console.log('g find err',err)
+		next();
 	})
-	
 })
 
-//设置禁言状态
-router.post('/set_mute_status', (req, res, next) => {
-	var id = req.body.id,
-		memberIds = req.body.memberIds,
-		muteStatus = req.body.muteStatus;
+// 设置群信息
+router.post('/set_infos', (req, res, next) => {
+	var groupId = req.body.groupId,
+		minute = req.body.minute,
+		groupName = req.body.groupName,
+		muteStatus = req.body.muteStatus,
+		clientIds = req.body.clientIds;
 	var members = [];
-	memberIds.forEach( (member) => {
-		members.push({id: member})
-	})
-
+	if(clientIds) {
+		clientIds.forEach( (id) => {
+			members.push({id: id})
+		})
+	}
 	var group = {
-		id: id,
+		id: groupId,
 		members: members,
+		minute: minute || 30*24*60
+
 	};
-	return getGroup(group).then((result) => {
-		if(result.code == 200){
-			if(result.members.length == 0){
-				return res.send(ErrorInfo.NOT_EXIST);
-			}
-			if(muteStatus == 0){
-				unmuteMembers(group).then((result)=> {
-					if(result.code == 200){
-						return Group.update({
-							muteStatus: muteStatus
-						},{
-							where: {
-								id: id
-							}
-						}).then(() => {
-							return res.send(new APIResult(200));
-						})
-					}
-				}).catch((error) => {
-					console.log('err:',error)
-					next();
-				})
-			}else {
-				return Group.update({
-					muteStatus: muteStatus
-				},{
-					where: {
-						id: id
-					}
-				}).then(() => {
-					return res.send(new APIResult(200));
-				})
-			}
-			
+	return Group.findOne({
+		where: {
+			id: groupId
+		},
+		attributes: ['muteStatus', 'clientIds', 'groupName']
+	}).then( (result) => {
+		if(!result) {
+			return res.send(ErrorInfo.NOT_EXIST);
 		}
+		return Group.update({
+			muteStatus: muteStatus == undefined ? result.muteStatus:muteStatus,
+			groupName: groupName == undefined ? result.groupName:groupName,
+			clientIds: clientIds == undefined ? result.clientIds:JSON.stringify(clientIds),
+		},{
+			where: {
+				id: groupId
+			}
+		}).then(() => {
+			console.log('muteStatus', muteStatus)
+			if(muteStatus != undefined) {
+				if(muteStatus == 1){ //禁言 rc
+					return muteMembers(group).then((result)=> {
+						if(result.code == 200){
+							return res.send(new APIResult(200));
+						}
+					}).catch((error) => {
+						console.log('mute m err:',error)
+						next();
+					})
+				}else {//取消禁言 rc
+					console.log('取消禁言')
+					return unmuteMembers(group).then((result)=> {
+						if(result.code == 200){
+							return res.send(new APIResult(200));
+						}
+					}).catch((error) => {
+						console.log('unmute m err:',error)
+						next();
+					})
+				}
+			}
+			return res.send(new APIResult(200));
+		})
 	})
 })
 
-//查询群禁言状态
+// 查询群禁言状态
 router.post('/get_infos', (req, res, next) => {
-	var ids = req.body.ids,
-		groupIds = [];
-	console.log(typeof groupIds)
-	ids.forEach( (id) => {
-		groupIds.push({id:id})
+	var groupIds = req.body.groupIds,
+		ids = [];
+	groupIds.forEach( (id) => {
+		ids.push({id:id})
 	})
 	return Group.findAll({
         where: {
-			[Op.or]: groupIds
+			[Op.or]: ids
         },
-        attributes: ['id', 'muteStatus']
+        attributes: ['id', 'muteStatus', 'groupName', 'clientIds']
     }).then( (infos) => {
-		var arrId = [];
-		infos.forEach( (infos) => {
-			arrId.push(infos.id)
-		})
-		ids.forEach( (id) => {
-			if(arrId.indexOf(id) == -1){
-				infos.push({
-					"id": id,
-					"muteStatus": 0
-				})
+		infos.forEach( item => {
+			if(item.clientIds){
+				item.clientIds = JSON.parse(item.clientIds)
+			}
+			if(!item.clientIds){
+				item.clientIds = [];
 			}
 		})
 		return res.send(new APIResult(200,infos));
